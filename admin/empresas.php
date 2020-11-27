@@ -11,18 +11,20 @@ mysqli_set_charset( $conn, 'utf8');
 $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
   $pagina_atual = "dependentes.php";
 //Selecionar todos os logs da tabela
-$pesquisaEmpresa = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,
-telefoneEmpresa,logoEmpresa,ativa,nomeUsuario from empresa e inner join usuario u on e.usuario = u.idUsuario";
-   $usuarios = mysqli_query($conn, $pesquisaEmpresa);
+$pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
+ entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obrainner join usuario u
+  on obra.usuario = u.idUsuario inner join statusObra s
+   on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa order by obra.idObra asc";
+   $obras = mysqli_query($conn, $pesquisaObras);
 
 //Contar o total de logs
-$totalEmpresas = mysqli_num_rows($usuarios);
+$totalObras = mysqli_num_rows($obras);
 
 //Seta a quantidade de logs por pagina
 $quantidade_pg = 5;
 
 //calcular o número de pagina necessárias para apresentar os logs
-$num_pagina = ceil($totalEmpresas/$quantidade_pg);
+$num_pagina = ceil($totalObras/$quantidade_pg);
 
 //Calcular o inicio da visualizacao
 $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
@@ -30,19 +32,24 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-  $pesquisaEmpresa = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,
-  telefoneEmpresa,logoEmpresa,ativa,nomeUsuario from empresa e inner join usuario u on e.usuario = u.idUsuario";
+$pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
+ entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
+  on obra.usuario = u.idUsuario inner join statusObra s
+   on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa";
 }
 else{
   $pesquisa = $_POST["termo"];
 
-  $pesquisaEmpresa = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,
-telefoneEmpresa,logoEmpresa,ativa,nomeUsuario from empresa e inner join usuario u on e.usuario = u.idUsuario";
+  $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
+  entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
+   on obra.usuario = u.idUsuario inner join statusObra s
+    on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa 
+    WHERE obra.tituloObra LIKE '%".$pesquisa."%' order by obra.tituloObra,e.nomeEmpresa";
 }
 
 
-$resultadoEmpresas = mysqli_query($conn, $pesquisaEmpresa);
-$totalEmpresas = mysqli_num_rows($resultadoEmpresas);
+$resultadoObras = mysqli_query($conn, $pesquisaObras);
+$totalObras = mysqli_num_rows($resultadoObras);
 
 
 ?>
@@ -208,12 +215,14 @@ Filtar compradores por nome
 
 
 
-             if($totalEmpresas ==0){
-              $pesquisaEmpresa = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,
-              telefoneEmpresa,logoEmpresa,ativa,nomeUsuario from empresa e inner join usuario u on e.usuario = u.idUsuario";
+             if($totalObras ==0){
+              $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
+              entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
+               on obra.usuario = u.idUsuario inner join statusObra s
+                on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa";
 
-$resultadoEmpresas = mysqli_query($conn, $pesquisaEmpresa);
-$totalEmpresas = mysqli_num_rows($resultadoEmpresas);
+$resultadoObras = mysqli_query($conn, $pesquisaObras);
+$totalObras = mysqli_num_rows($resultadoObras);
 
   $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
   }
@@ -224,10 +233,10 @@ $totalEmpresas = mysqli_num_rows($resultadoEmpresas);
  <table class="table table-bordered">
     <thead>
       <tr>
-      <th>Código da empresa </th>
+      <th>Código da obra </th>
    
-   <th>Nome da empresa </th>
-      <th>Nome do responsável pela empresa </th>
+   <th>Nome da obra </th>
+      <th>Nome da empresa </th>
         
    
 
@@ -240,25 +249,25 @@ $totalEmpresas = mysqli_num_rows($resultadoEmpresas);
              <?php 
 
 
-             while($row = mysqli_fetch_assoc($resultadoEmpresas)){ ?>
+             while($row = mysqli_fetch_assoc($resultadoObras)){ ?>
 
 
       <tr>
-      <th> <?php echo $row["idEmpresa"] ?> </th>
-      <th> <?php echo $row["nomeEmpresa"] ?> </th>
+      <th> <?php echo $row["idObra"] ?> </th>
+      <th> <?php echo $row["tituloObra"] ?> </th>
   
-  <th> <?php echo $row["nomeUsuario"] ?> </th>
+  <th> <?php echo $row["nomeEmpresa"] ?> </th>
 
 
  </th>
 
-<th>  <a href="#edicao<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
-  <a href="#verEmpresa<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span></button></a>
+<th>  <a href="#edicao<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
+  <a href="#verObra<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span></button></a>
   
   <?php 
   if($row["entregue"] ==0){?>
 
-  <a href="#entregarObra<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button></a>
+  <a href="#entregarObra<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button></a>
   <?php } ?>
 
 
@@ -268,27 +277,32 @@ $totalEmpresas = mysqli_num_rows($resultadoEmpresas);
   <!-- ================================== Ver obra ========================== -->
 
 
-        <div id="verEmpresa<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
+        <div id="verObra<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Ver dados de uma empresa</h4>
+        <h4 class="modal-title">Ver dados de uma obra</h4>
       </div>
       <div class="modal-body">
       <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da empresa</label>
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da obra</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["tituloObra"] ?>"readonly>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Empresa responsável</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeEmpresa"] ?>"readonly>
     </div>
   </div>
 
-
-
   <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Responsável</label>
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Engenheiro responsável</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeUsuario"] ?>"readonly>
     </div>
@@ -379,7 +393,7 @@ echo $row["nomeStatus"];
 
 
 
-<!-- ======================== FIM VER usuarios ================== -->
+<!-- ======================== FIM VER OBRAS ================== -->
 
 
 <!-- ================================== Edição obra ========================== -->
@@ -558,7 +572,7 @@ $statusObra = $result->fetch_assoc();
 
 
 
-<!-- ============== Começo  entrega de usuarios ============== -->
+<!-- ============== Começo  entrega de obras ============== -->
 
 
 <form action="nova.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
@@ -604,10 +618,10 @@ $statusObra = $result->fetch_assoc();
 </form>
 
 
-<!-- ============== Fim  entrega de usuarios ============== -->
+<!-- ============== Fim  entrega de obras ============== -->
 
 
-<!-- ============== Começo  cadastro de usuarios ============== -->
+<!-- ============== Começo  cadastro de obras ============== -->
 
 
 
@@ -688,7 +702,7 @@ while($engenheiro = $result2->fetch_assoc()) {
 
 
 </form>
-<!-- ============== FIM cadastro de usuarios ============== -->
+<!-- ============== FIM cadastro de obras ============== -->
 
 
 
@@ -701,14 +715,14 @@ while($engenheiro = $result2->fetch_assoc()) {
   
   
        <?php
-$result_log = "SELECT * from usuarios";
+$result_log = "SELECT * from obras";
 
-$usuarios = mysqli_query($conn, $result_log);
+$obras = mysqli_query($conn, $result_log);
 
 //Contar o total de logs
-$totalEmpresas = mysqli_num_rows($usuarios);
+$totalObras = mysqli_num_rows($obras);
 $limitador =1;
-if($totalEmpresas > $quantidade_pg){?>
+if($totalObras > $quantidade_pg){?>
             <nav class="text-center">
                <ul class="pagination">
 
