@@ -166,7 +166,7 @@ $pagina_atual = "home.php";
                             <h4 class="title">Total de usuários cadastrados </h4>
                             <div class="info">
                               <?php 
-$sql = "select * from responsavel";
+$sql = "select * from usuario";
     $result=$conn->query($sql);
      $rowcount=mysqli_num_rows($result);
      ?>
@@ -174,7 +174,7 @@ $sql = "select * from responsavel";
                             </div>
                           </div>
                           <div class="summary-footer">
-                            <a class="text-muted text-uppercase" href="clientes.php">Exibir clientes </a>
+                            <a class="text-muted text-uppercase" href="usuarios.php">Exibir usuários </a>
                           </div>
                         </div>
                       </div>

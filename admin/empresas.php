@@ -11,10 +11,8 @@ mysqli_set_charset( $conn, 'utf8');
 $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
   $pagina_atual = "dependentes.php";
 //Selecionar todos os logs da tabela
-$pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
- entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obrainner join usuario u
-  on obra.usuario = u.idUsuario inner join statusObra s
-   on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa order by obra.idObra asc";
+$pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
+
    $obras = mysqli_query($conn, $pesquisaObras);
 
 //Contar o total de logs
@@ -32,19 +30,14 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-$pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
- entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
-  on obra.usuario = u.idUsuario inner join statusObra s
-   on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa";
+  $pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
+
 }
 else{
   $pesquisa = $_POST["termo"];
 
-  $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
-  entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
-   on obra.usuario = u.idUsuario inner join statusObra s
-    on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa 
-    WHERE obra.tituloObra LIKE '%".$pesquisa."%' order by obra.tituloObra,e.nomeEmpresa";
+  $pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
+
 }
 
 
@@ -216,10 +209,7 @@ Filtar compradores por nome
 
 
              if($totalObras ==0){
-              $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
-              entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
-               on obra.usuario = u.idUsuario inner join statusObra s
-                on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa";
+              $pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
 
 $resultadoObras = mysqli_query($conn, $pesquisaObras);
 $totalObras = mysqli_num_rows($resultadoObras);
@@ -253,8 +243,8 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
 
       <tr>
-      <th> <?php echo $row["idObra"] ?> </th>
-      <th> <?php echo $row["tituloObra"] ?> </th>
+      <th> <?php echo $row["idEmpresa"] ?> </th>
+      
   
   <th> <?php echo $row["nomeEmpresa"] ?> </th>
 
@@ -399,172 +389,6 @@ echo $row["nomeStatus"];
 <!-- ================================== Edição obra ========================== -->
 
 
-<form action="editarObra.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
-
-
-<div id="edicao<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
-<div class="modal-dialog">
-
-<!-- Modal content-->
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Entrega de uma obra</h4>
-</div>
-<div class="modal-body">
-<div class="form-group row">
-    <label for="inputEmail3" class="col-sm-2 col-form-label">Titulo da obra</label>
-    <div class="col-sm-10">
-      <input type="text" name="titulo" class="form-control" id="inputEmail3" value="<?php echo $row["tituloObra"]?>">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">Data Inicial</label>
-    <div class="col-sm-10">
-    <input type="text" name="dataIni" class="form-control" id="inputEmail3" value="<?php 
-    $dataView = explode("-",$row["dataInicial"]);  
-    $dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-    
-      echo $dataView;      
-          
-    
-    ?>">
-
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">Data de previsão de entrega</label>
-    <div class="col-sm-10">
-    <input type="text" name="dataProv" class="form-control" id="inputEmail3" value="<?php 
-    $dataView = explode("-",$row["dataProvavel"]);  
-    $dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-    
-      echo $dataView;      
-          
-    ?>">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">Data da entrega</label>
-    <div class="col-sm-10">
-    <input type="text" name="dataEntrega" class="form-control" id="inputEmail3" value="<?php 
-    $dataEntrega = $row["dataEntrega"];
-    if($dataEntrega==null){
-      echo "Ainda não entregue";
-    }
-    else{
-      $dataView = explode("-",$row["dataEntrega"]);  
-      $dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-      
-        echo $dataView;
-    }
-    
-    
-    ?>">
-    </div>
-  </div>
-
-  <div class="form-group row">
-      <label for="inputEstado">Empresa</label>
-      <select id="inputEstado" name="empresa" class="form-control">
-
-      <?php 
-$sql = "SELECT idEmpresa,nomeEmpresa FROM empresa e INNER JOIN obra o on o.empresa = e.idEmpresa where o.idObra = " .$row["idObra"];
-$result = $conn->query($sql);
-$empresa = $result->fetch_assoc();
-      
-      ?>
-        <option selected value="<?php echo $empresa["idEmpresa"]; ?>"><?php echo $empresa["nomeEmpresa"];?></option>
-        <?php
-        
-        $sql2 = "SELECT idEmpresa,nomeEmpresa FROM empresa e  where not e.idEmpresa = " .$empresa["idEmpresa"] . " order by e.nomeEmpresa";
-
-
-        $result2 = $conn->query($sql2);
-        
-        while($socio2 = $result2->fetch_assoc()) { 
-        
-                ?>
-            <option value="<?php echo $socio2["idEmpresa"]; ?>"><?php echo $socio2["nomeEmpresa"];?></option>
-                                    <?php
-                                }
-        
-        ?>
-      </select>
-    </div>
-
-    <div class="form-group row">
-      <label for="inputEstado">Engenheiro</label>
-      <select id="inputEstado" name="engenheiro" class="form-control">
-
-      <?php 
-$sql = "SELECT idUsuario,nomeUsuario FROM usuario u INNER JOIN obra o on o.usuario = u.idUsuario where o.idObra = " .$row["idObra"];
-$result = $conn->query($sql);
-$administrador = $result->fetch_assoc();
-      
-      ?>
-        <option selected value="<?php echo $administrador["idUsuario"]; ?>"><?php echo $administrador["nomeUsuario"];?></option>
-        <?php
-        
-        $sql2 = "SELECT * from usuario u WHERE u.engenheiro = '1' and not u.idUsuario= " .$administrador["idUsuario"] . " order by u.nomeUsuario" ;
-        $result2 = $conn->query($sql2);
-        
-        while($socio2 = $result2->fetch_assoc()) { 
-        
-                ?>
-            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
-                                    <?php
-                                }
-        
-        ?>
-      </select>
-    </div>
-
-   
-
-    <div class="form-group row">
-      <label for="inputEstado">Situação da obra </label>
-      <select id="inputEstado" name="situacao" class="form-control">
-
-      <?php 
-$sql = "SELECT idStatus,nomeStatus FROM statusObra s INNER JOIN obra o on o.statusObra = s.idStatus where o.idObra = " .$row["idObra"];
-$result = $conn->query($sql);
-$statusObra = $result->fetch_assoc();
-      
-      ?>
-        <option selected value="<?php echo $statusObra["idStatus"]; ?>"><?php echo $statusObra["nomeStatus"];?></option>
-        <?php
-        
-        $sql2 = "SELECT idStatus,nomeStatus FROM statusObra s  where not s.idStatus = " .$statusObra["idStatus"]. " order by s.nomeStatus";
-
-
-        $result2 = $conn->query($sql2);
-        
-        while($socio2 = $result2->fetch_assoc()) { 
-        
-                ?>
-            <option value="<?php echo $socio2["idStatus"]; ?>"><?php echo $socio2["nomeStatus"];?></option>
-                                    <?php
-                                }
-        
-        ?>
-      </select>
-    </div>
-
-</div>
-<div class="modal-footer">
-
-<button type="submit" class=" btn btn-primary">Confirmar dados</button>
-</div>
-</div>
-
-</div>
-</div>
-
-
-
-
-</form>
 
 
 
@@ -575,133 +399,7 @@ $statusObra = $result->fetch_assoc();
 <!-- ============== Começo  entrega de obras ============== -->
 
 
-<form action="nova.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
 
-
-<div id="entregarObra<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
-<div class="modal-dialog">
-
-<!-- Modal content-->
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Entrega de uma obra</h4>
-</div>
-<div class="modal-body">
-<div class="form-group row">
-<label for="inputEmail3" class="col-sm-6 col-form-label">Nome da obra</label>
-<div class="col-sm-4">
-<input type="text" class="form-control" name="nome02" value="<?php echo $row["tituloObra"] ?>"readonly>
-</div>
-</div>
-
-<div class="form-group row">
-<label for="inputEmail3" class="col-sm-6 col-form-label">Data da entrega</label>
-<div class="col-sm-4">
-<input type="text" class="form-control" name="dataEntrega">
-</div>
-</div>
-
-</div>
-<div class="modal-footer">
-
-<button type="submit" class=" btn btn-primary">Confirmar dados</button>
-</div>
-</div>
-
-</div>
-</div>
-
-
-
-
-</form>
-
-
-<!-- ============== Fim  entrega de obras ============== -->
-
-
-<!-- ============== Começo  cadastro de obras ============== -->
-
-
-
-
-
-    <form action="cadastrarObra.php?id=<?php echo $row["idEmpresa"]; ?>" method="POST" enctype="multipart/form-data">
-
-
-        <div id="obra<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Cadastrar uma obra</h4>
-      </div>
-      <div class="modal-body">
-      <div class="form-group">
-    <label for="exampleInputEmail1">Empresa responsável</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" name="nomeEmpresa" value="<?php echo $row["nomeEmpresa"] ?>" readonly>
-    </div>
-
-    <div class="form-group">
-    <label for="inputEmail3" class="form-group">Engenheiro responsavel</label>
-    <div class="form-group">
-      <select name="engenheiro" required>
-   <option >Selecione</option>
-        <?php 
-    //    $idselect=$row["id_cliente"];
-        $sql2 = "SELECT * from usuario u  where u. engenheiro =1 order by u.nomeUsuario";
-$result2 = $conn->query($sql2);
-
-while($engenheiro = $result2->fetch_assoc()) { 
-
-        ?>
-    <option value="<?php echo $engenheiro["idEngenheiro"]; ?>"><?php echo $engenheiro["nomeEngenheiro"];?></option>
-                            <?php
-                        }
-                    ?>
-</select>
-    </div>
-  </div>
-
-
-  <div class="form-group">
-    <label for="inputEmail3" class="form-group">Data de inicio</label>
-    <div class="form-group">
-    <input type="text" name="datIni" min="1900-01-01"max="2040-12-31" class="form-control"required>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-          Favor inserir conforme o padrão : 25/12/2019.
-        </small>
-    </div>
-  </div>
-
-  
-  <div class="form-group">
-    <label for="inputEmail3" class="form-group">Data de previsão para entrega</label>
-    <div class="form-group">
-    <input type="text" name="datFim" min="1900-01-01"max="2040-12-31" class="form-control"required>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-          Favor inserir conforme o padrão : 25/12/2019.
-        </small>
-    </div>
-  </div>
-      </div>
-      <div class="modal-footer">
-                     <button type="submit" class=" btn btn-primary">Confirmar dados</button>
-
-        <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-
-
-</form>
 <!-- ============== FIM cadastro de obras ============== -->
 
 
