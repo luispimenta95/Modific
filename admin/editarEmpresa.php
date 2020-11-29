@@ -1,11 +1,6 @@
 <?php
 include '../conecta.php'; 
 $idEmpresa = $_GET['id'];
-$editarEmpresa = "SELECT * FROM empresa WHERE idEmpresa = $idEmpresa";
-$result = $conn->query($editarEmpresa);
-
-
-$empresa = $result->fetch_assoc();
 $nomeEmpresa;
 $cnpjEmpresa;
 $telefoneEmpresa;
@@ -29,7 +24,7 @@ $responsavelEmpresa = $_POST['responsavel'];
 $logoEmpresa = $novo_nome;
 $situacaoEmpresa = $_POST['situacao'];
 
-$sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa',logoEmpresa = '$logoEmpresa' , telefoneEmpresa = '$telefoneEmpresa' , cnpjEmpresa = '$cnpjEmpresa' ,ativa =" .$situacaoEmpresa. "  WHERE idEmpresa=$idEmpresa";
+$sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$cnjEmpresa' , telefoneEmpresa = '$telefoneEmpresa' ,logoEmpresa = '$logoEmpresa', ativa = $situacaoEmpresa, usuario = $responsavelEmpresa  WHERE idEmpresa=$idEmpresa";
 if ($conn->query($sqlUpdate) === TRUE) {
 
     header("Location:teste.php");
@@ -47,7 +42,7 @@ $cnpjEmpresa = $_POST['cnpjEmpresa'];
 $responsavelEmpresa = $_POST['responsavel'];
 $situacaoEmpresa = $_POST['situacao'];
 
-$sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa',ativa = $situacaoEmpresa, cnpjEmpresa='$cnpjEmpresa', telefoneEmpresa = '$telefoneEmpresa' , usuario = $responsavelEmpresa WHERE idEmpresa=$idEmpresa";
+$sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$cnpjEmpresa' , telefoneEmpresa = '$telefoneEmpresa' , ativa = $situacaoEmpresa, usuario = $responsavelEmpresa  WHERE idEmpresa=$idEmpresa";
 
 
 if ($conn->query($sqlUpdate) === TRUE) {
