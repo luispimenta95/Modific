@@ -33,8 +33,8 @@ if ($conn->query($sqlUpdate) === TRUE) {
   else echo $conn->error;
 
 }
-   
 
+   
 else {
 $nomeEmpresa = $_POST['nomeEmpresa'];
 $telefoneEmpresa = $_POST['telefoneEmpresa'];
