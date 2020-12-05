@@ -24,10 +24,10 @@ $responsavelEmpresa = $_POST['responsavel'];
 $logoEmpresa = $novo_nome;
 $situacaoEmpresa = $_POST['situacao'];
 
-$sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$cnjEmpresa' , telefoneEmpresa = '$telefoneEmpresa' ,logoEmpresa = '$logoEmpresa', ativa = $situacaoEmpresa, usuario = $responsavelEmpresa  WHERE idEmpresa=$idEmpresa";
+$sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$cnpjEmpresa' , telefoneEmpresa = '$telefoneEmpresa' ,logoEmpresa = '$logoEmpresa', ativa = $situacaoEmpresa, usuario = $responsavelEmpresa  WHERE idEmpresa=$idEmpresa";
 if ($conn->query($sqlUpdate) === TRUE) {
 
-    header("Location:teste.php");
+    header("Location:empresas.php");
   }
 
   else echo $conn->error;
@@ -47,7 +47,7 @@ $sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$c
 
 if ($conn->query($sqlUpdate) === TRUE) {
 
-    header("Location:teste.php");
+    header("Location:empresas.php");
   }
 
   else echo $conn->error;

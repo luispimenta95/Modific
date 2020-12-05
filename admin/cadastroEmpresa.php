@@ -32,7 +32,7 @@ dataCadastro) VALUES ('$nomeEmpresa','$cnpjEmpresa', '$telefoneEmpresa',
 
 if ($conn->query($salvarEmpresa) === TRUE) {
 
-    header("Location:teste.php");
+    header("Location:empresas.php");
   }
 
   else {
