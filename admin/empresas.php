@@ -11,8 +11,7 @@ mysqli_set_charset( $conn, 'utf8');
 $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
   $pagina_atual = "dependentes.php";
 //Selecionar todos os logs da tabela
-$pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
-
+$pesquisaObras = "SELECT nomeEmpresa from empresa e order by e.nomeEmpresa";
    $obras = mysqli_query($conn, $pesquisaObras);
 
 //Contar o total de logs
@@ -30,14 +29,15 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-  $pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
+  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario
+  order by e.nomeEmpresa";
 
 }
 else{
   $pesquisa = $_POST["termo"];
 
-  $pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
-
+  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario
+  order by e.nomeEmpresa";
 }
 
 
@@ -209,30 +209,25 @@ Filtar compradores por nome
 
 
              if($totalObras ==0){
-              $pesquisaObras = "SELECT nomeEmpresa,idEmmpresa from empresa e ";
-
-$resultadoObras = mysqli_query($conn, $pesquisaObras);
-$totalObras = mysqli_num_rows($resultadoObras);
+             
+              
 
   $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
   }
 ?>
               <div class="table-responsive">  
-
+              <table class="table table-bordered">
              
- <table class="table table-bordered">
-    <thead>
+              <thead>
       <tr>
-      <th>Código da obra </th>
-   
-   <th>Nome da obra </th>
-      <th>Nome da empresa </th>
         
+    <th> Nome da empresa</th>
    
-
+    <th> Responsável </th>
+ 
     <th> Ações </th>
         
-
+          </tr>
         </tr>
     </thead>
     <tbody>
@@ -243,131 +238,77 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
 
       <tr>
-      <th> <?php echo $row["idEmpresa"] ?> </th>
-      
+
+<th> <?php echo $row["nomeEmpresa"] ?> </th>
+
+<th> <?php echo $row["nomeUsuario"] ?> </th>
   
-  <th> <?php echo $row["nomeEmpresa"] ?> </th>
+  <th>     
+           
+       <a href="#update<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'>Editar</button></a>
+
+       <a href="#verDados<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Ver dados</button></a>
 
 
- </th>
-
-<th>  <a href="#edicao<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
-  <a href="#verObra<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span></button></a>
-  
-  <?php 
-  if($row["entregue"] ==0){?>
-
-  <a href="#entregarObra<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button></a>
-  <?php } ?>
-
-
-
- </th>
-
-  <!-- ================================== Ver obra ========================== -->
-
-
-        <div id="verObra<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
+          </th>
+          <div id="verDados<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Ver dados de uma obra</h4>
+        <h4 class="modal-title">Ver dados de uma empresa</h4>
       </div>
       <div class="modal-body">
-      <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da obra</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["tituloObra"] ?>"readonly>
-    </div>
-  </div>
 
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Empresa responsável</label>
+      <div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="UP/<?php echo $row['logoEmpresa']; ?>" alt="Imagem de capa da empresa">
+
+</div>
+
+      <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da empresa</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeEmpresa"] ?>"readonly>
     </div>
   </div>
 
+  
   <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Engenheiro responsável</label>
+    <label for="inputEmail3" class="col-sm-6 col-form-label">CNPJ da empresa</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["cnpjEmpresa"] ?>"readonly>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Telefone da empresa</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["telefoneEmpresa"] ?>"readonly>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Situação da empresa</label>
+    <div class="col-sm-4">
+
+    <?php 
+        $situacao;
+        if($row["ativa"]==1){
+          $situacao = "Ativa";
+        }
+        else $situacao = "Intiva";
+    ?>
+      <input type="text" class="form-control" name="nome02" value="<?php echo $situacao ?>"readonly>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Responsável pela empresa</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeUsuario"] ?>"readonly>
     </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Data inicial</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-$dataView = explode("-",$row["dataInicial"]);  
-$dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-
-  echo $dataView;      
-      
-      
-      ?>" readonly>
-    </div>
-
-
-    
-  </div>
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Data provavel de entrega</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-$dataView = explode("-",$row["dataProvavel"]);  
-$dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-
-  echo $dataView;      
-      
-      
-      ?>"readonly>
-    </div>
-
-
-    
-  </div>
-
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Data  de entrega</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-$dataEntrega = $row["dataEntrega"];
-if($dataEntrega==null){
-  echo "Ainda não entregue";
-}
-else{
-  $dataView = explode("-",$row["dataEntrega"]);  
-  $dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-  
-    echo $dataView;
-}
- 
-      
-      
-      ?>"readonly>
-    </div>
-
-
-    
-  </div>
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Situação da obra</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-echo $row["nomeStatus"];
-      
-      
-      ?>" readonly>
-    </div>
-
-
-    
   </div>
 
       </div>
@@ -380,39 +321,15 @@ echo $row["nomeStatus"];
   </div>
 </div>
 
-
-
-
-<!-- ======================== FIM VER OBRAS ================== -->
-
-
-<!-- ================================== Edição obra ========================== -->
-
-
-
-
-
-<!-- ============== Fim edição ============== -->
-
-
-
-<!-- ============== Começo  entrega de obras ============== -->
-
-
-
-<!-- ============== FIM cadastro de obras ============== -->
-
-
-
-        <?php } ?>
+          <?php } ?>
         </tr>
           
     </tbody>
   </table>
 
   
-  
        <?php
+       
 $result_log = "SELECT * from obras";
 
 $obras = mysqli_query($conn, $result_log);
