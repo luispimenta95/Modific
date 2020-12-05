@@ -11,7 +11,7 @@ mysqli_set_charset( $conn, 'utf8');
 $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
   $pagina_atual = "empresas.php";
 //Selecionar todos os logs da tabela
-$pesquisaObras = "SELECT nomeEmpresa from empresa e order by e.nomeEmpresa";
+$pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario";
    $obras = mysqli_query($conn, $pesquisaObras);
 
 //Contar o total de logs
@@ -29,15 +29,15 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario
-  order by e.nomeEmpresa";
+  $pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario";
+
 
 }
 else{
   $pesquisa = $_POST["termo"];
 
-  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario
-  order by e.nomeEmpresa";
+  $pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario";
+
 }
 
 
@@ -221,9 +221,9 @@ Filtar compradores por nome
               <thead>
       <tr>
         
-    <th> Nome da empresa</th>
+    <th> Nome do usuário</th>
    
-    <th> Responsável </th>
+    <th> Tipo de usuário </th>
  
     <th> Ações </th>
         
@@ -239,77 +239,95 @@ Filtar compradores por nome
 
       <tr>
 
-<th> <?php echo $row["nomeEmpresa"] ?> </th>
 
 <th> <?php echo $row["nomeUsuario"] ?> </th>
+<th> <?php 
+
+
+$usuario;
+if($row["engenheiro"]==1){
+$usuario = "Engenheiro(a)";
+}else {
+  $usuario = "Usuário comum";
+
+}
+
+echo $usuario;
+?> </th>
   
   <th>     
            
-       <a href="#edicao<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'>Editar</button></a>
+       <a href="#edicao<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'>Editar</button></a>
 
-       <a href="#verDados<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Ver dados</button></a>
+       <a href="#verDados<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Ver dados</button></a>
 
 
           </th>
-          <div id="verDados<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
+          <div id="verDados<?php echo $row["idUsuario"] ?>" class="modal fade" role="dialog" class="form-group">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Ver dados de uma empresa</h4>
+        <h4 class="modal-title">Ver dados de um usuário</h4>
       </div>
       <div class="modal-body">
 
-      <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="UP/<?php echo $row['logoEmpresa']; ?>" alt="Imagem de capa da empresa">
-
-</div>
+ 
 
       <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da empresa</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeEmpresa"] ?>"readonly>
-    </div>
-  </div>
-
-  
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">CNPJ da empresa</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["cnpjEmpresa"] ?>"readonly>
-    </div>
-  </div>
-  
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Telefone da empresa</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["telefoneEmpresa"] ?>"readonly>
-    </div>
-  </div>
-  
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Situação da empresa</label>
-    <div class="col-sm-4">
-
-    <?php 
-        $situacao;
-        if($row["ativa"]==1){
-          $situacao = "Ativa";
-        }
-        else $situacao = "Intiva";
-    ?>
-      <input type="text" class="form-control" name="nome02" value="<?php echo $situacao ?>"readonly>
-    </div>
-  </div>
-  
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Responsável pela empresa</label>
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome do usuário</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeUsuario"] ?>"readonly>
     </div>
   </div>
+
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">CPF do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["cpfUsuario"] ?>"readonly>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Telefone do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["telefoneUsuario"] ?>"readonly>
+    </div>
+  </div>
+  
+  <?php 
+
+
+$usuario;
+if($row["engenheiro"]==1){
+$usuario = "Engenheiro(a)";
+?>
+<div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Tipo do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $usuario ?>"readonly>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Numero do CREA</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["numeroCrea"] ?>"readonly>
+    </div>
+  </div>
+<?php }else {
+  $usuario = "Usuário comum";
+  ?>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Tipo do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $usuario ?>"readonly>
+    </div>
+  </div>
+
+<?php } ?>
 
       </div>
       <div class="modal-footer">
@@ -320,205 +338,6 @@ Filtar compradores por nome
 
   </div>
 </div>
-
-
-
-<form action="editarEmpresa.php?id=<?php echo $row["idEmpresa"]; ?>" method="POST" enctype="multipart/form-data">
-
-
-<div id="edicao<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
-<div class="modal-dialog">
-
-<!-- Modal content-->
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Entrega de uma obra</h4>
-</div>
-<div class="modal-body">
-<div class="form-group row">
-    <label for="inputEmail3" >Nome da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="nomeEmpresa" class="form-control" id="inputEmail3" value="<?php echo $row["nomeEmpresa"]?>">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputEmail3" >CNPJ da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="cnpjEmpresa" class="form-control" id="inputEmail3" value="<?php echo $row["cnpjEmpresa"]?>">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputEmail3" >Telefone da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="telefoneEmpresa" class="form-control" id="inputEmail3" value="<?php echo $row["telefoneEmpresa"]?>">
-    </div>
-  </div>
-    <div class="form-group row">
-      <label for="inputEstado">Responsável pela empresa</label>
-      <select id="inputEstado" name="responsavel" class="form-control">
-
-      <?php 
-$sql = "SELECT idUsuario,nomeUsuario FROM usuario u INNER JOIN empresa e on e.usuario = u.idUsuario where e.idEmpresa = " .$row["idEmpresa"];
-$result = $conn->query($sql);
-$administrador = $result->fetch_assoc();
-      
-      ?>
-        <option selected value="<?php echo $administrador["idUsuario"]; ?>"><?php echo $administrador["nomeUsuario"];?></option>
-        <?php
-        
-        $sql2 = "SELECT * from usuario u WHERE not u.idUsuario= " .$administrador["idUsuario"] . " order by u.nomeUsuario" ;
-        $result2 = $conn->query($sql2);
-        
-        while($socio2 = $result2->fetch_assoc()) { 
-        
-                ?>
-            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
-                                    <?php
-                                }
-        
-        ?>
-      </select>
-    </div>
-
-    <div class="form-group row">
-    <label for="inputEmail3" >Situação da empresa</label>
-   <?php 
-if ($row["ativa"]==1){?>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao1" value="1" checked>
-  <label class="form-check-label" for="situacao1">
-Ativa
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao2" value="0">
-  <label class="form-check-label" for="situacao2">
-Inativa
-
-  </label>
-</div>
-
-<?php } else {?>
-
-  <div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao1" value="1" >
-  <label class="form-check-label" for="situacao1">
-    Ativa
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao2" value="0" checked>
-  <label class="form-check-label" for="situacao2">
-    Inativa
-  </label>
-</div>
-<?php } 
-   ?>
-  </div>
-
-                                
-    <div class="form-group">
-    Selecione uma imagem: <input name="arquivo" type="file" />   
-    </div>
-
-
-
-</div>
-<div class="modal-footer">
-
-<button type="submit" class=" btn btn-primary">Confirmar dados</button>
-<button type="submit" class=" btn btn-default" data-dismiss="modal">Voltar</button>
-
-</div>
-</div>
-
-</div>
-</div>
-
-
-
-
-</form>
-
-
-<form action="cadastroEmpresa.php" method="POST" class="form-group"  enctype="multipart/form-data">
-       
-       <div id="cadastro" class="modal fade" role="dialog" class="form-group">
-         <div class="modal-dialog">
-
-   <!-- Modal content-->
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal">&times;</button>
-       
-       <h4 class="modal-title">Cadastro de empresa</h4>
-     </div>
-     <div class="modal-body">
-
-     <div class="form-group row">
-    <label for="inputEmail3" >Nome da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="nomeEmpresa" class="form-control" id="inputEmail3" >
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputEmail3" >CNPJ da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="cnpjEmpresa" class="form-control" id="inputEmail3" >
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputEmail3" >Telefone da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="telefoneEmpresa" class="form-control" id="inputEmail3">
-    </div>
-  </div>
-    <div class="form-group row">
-      <label for="inputEstado">Responsável pela empresa</label>
-      <select id="inputEstado" name="responsavel" class="form-control">
-
-
-        <option>Selecione </option>
-        <?php
-        
-        $sql2 = "SELECT * from usuario u  order by u.nomeUsuario" ;
-        $result2 = $conn->query($sql2);
-        
-        while($socio2 = $result2->fetch_assoc()) { 
-        
-                ?>
-            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
-                                    <?php
-                                }
-        
-        ?>
-      </select>
-    </div>
-
-   
-
-                                
-    <div class="form-group">
-    Selecione uma logo: <input name="arquivo" type="file" />   
-    </div>
- </div>
-
-
-   
-     <div class="modal-footer">
-                    <button type="submit" class=" btn btn-primary">Realizar cadastro</button>
-
-       <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
-     </div>
-   </div>
-
- </div>
-                       </div>
-         
-</form>
-
-
 
           <?php } ?>
         </tr>
