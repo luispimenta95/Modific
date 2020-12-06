@@ -22,13 +22,13 @@ $dataBdFim = $dataBdFim[2]."-".$dataBdFim[1]."-".$dataBdFim[0];
 
 if($situacao == 3){
     $sql_update = "UPDATE obra SET dataEntrega ='$dataBdFim'
-    ,dataInicial ='$dataBdIni',dataProvavel ='$dataBdProv',engenheiro ='$engenheiro'
-    ,situacao ='$situacao' , empresa ='$empresa', entregue ='1'  where obra.idObra = $idObra";
+    ,dataInicial ='$dataBdIni',dataProvavel ='$dataBdProv',usuario ='$engenheiro'
+    ,statusObra ='$situacao' , empresa ='$empresa', entregue ='1'  where obra.idObra = $idObra";
 }
 else{
     $sql_update = "UPDATE obra SET dataEntrega = NULL
-    ,dataInicial ='$dataBdIni',dataProvavel ='$dataBdProv',engenheiro ='$engenheiro'
-    ,situacao ='$situacao' , empresa ='$empresa', entregue ='0'  where obra.idObra = $idObra";
+    ,dataInicial ='$dataBdIni',dataProvavel ='$dataBdProv',usuario ='$engenheiro'
+    ,statusObra ='$situacao' , empresa ='$empresa', entregue ='0'  where obra.idObra = $idObra";
 }
 
 if ($conn->query($sql_update) === TRUE) {

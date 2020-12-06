@@ -264,6 +264,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
 <th>  <a href="#edicao<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
   <a href="#verObra<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span></button></a>
   
+  <a href="#novaImagem<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-camera' aria-hidden='true'></span></button></a>
   <?php 
   if($row["entregue"] ==0){?>
 
