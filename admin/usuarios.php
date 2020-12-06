@@ -89,6 +89,8 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
     <!-- Head Libs -->
     <script src="assets/vendor/modernizr/modernizr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 
     <script src="js/funcoes.js"></script>
 
@@ -258,12 +260,20 @@ echo $usuario;
 ?> </th>
   
   <th>     
-           
+           <?php 
+
+           if($row["engenheiro"]==1){?>
        <a href="#edicao<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'>Editar</button></a>
 
        <a href="#verDados<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Ver dados</button></a>
 
+<?php } else{?>
 
+  <a href="#edicao<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'>Editar</button></a>
+  <a href="#engenheiro<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Definir como engenheiro</button></a>
+
+       <a href="#verDados<?php echo $row["idUsuario"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Ver dados</button></a>
+<?php } ?>
           </th>
           <div id="verDados<?php echo $row["idUsuario"] ?>" class="modal fade" role="dialog" class="form-group">
   <div class="modal-dialog">
@@ -357,49 +367,79 @@ $usuario = "Engenheiro(a)";
 <div class="modal-body">
 
   
-    <div class="form-group row">
-    <label for="inputEmail3" >Tipo de usuario</label>
-   <?php 
-if ($row["engenheiro"]==1){?>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao1" value="1" checked onchange="getRating(this)">
-  <label class="form-check-label" for="situacao1">
-Engenheiro
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao2" value="0" onchange="getRating(this)">
-  <label class="form-check-label" for="situacao2">
-Usuário comum
-
-  </label>
-</div>
-
-<?php } else {?>
-
-  <div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao1" value="1" onchange="getRating(this)">
-  <label class="form-check-label" for="situacao1">
-    Engenheiro
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="situacao" id="situacao2" value="0" checked onchange="getRating(this)">
-  <label class="form-check-label" for="situacao2">
-    Usuário comum
-  </label>
-</div>
-<?php } 
-   ?>
-  </div>
-
-  <div class="form-group row" id="crea">
-    <label for="inputEmail3" >Telefone da empresa</label>
-    <div class="col-sm-10">
-      <input type="text" name="telefoneEmpresa" class="form-control" id="inputEmail3">
+   
+<div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nomeUsuario" value="<?php echo $row["nomeUsuario"] ?>">
     </div>
   </div>
- 
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">CPF do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="cpfUsuario" value="<?php echo $row["cpfUsuario"] ?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Telefone do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="telefoneUsuario" value="<?php echo $row["telefoneUsuario"] ?>">
+    </div>
+  </div>
+
+  <?php 
+
+  if($row["engenheiro"]==1){?>
+            <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Crea do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="creaEngenheiro" value="<?php echo $row["numeroCrea"] ?>">
+    </div>
+  </div>
+
+ <?php  } ?>
+
+</div>
+<div class="modal-footer">
+
+<button type="submit" class=" btn btn-primary">Confirmar dados</button>
+<button type="submit" class=" btn btn-default" data-dismiss="modal">Voltar</button>
+
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+
+</form>
+
+
+<form action="definirEngenheiro.php?id=<?php echo $row["idUsuario"]; ?>" method="POST" enctype="multipart/form-data">
+
+
+<div id="engenheiro<?php echo $row["idUsuario"] ?>" class="modal fade" role="dialog" class="form-group">
+<div class="modal-dialog">
+
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Definir como engenheiro</h4>
+</div>
+<div class="modal-body">
+
+  
+
+            <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Crea do usuário</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="creaEngenheiro" >
+    </div>
+  </div>
+
 
 
 </div>
@@ -434,52 +474,23 @@ Usuário comum
      </div>
      <div class="modal-body">
 
-     <div class="form-group row">
-    <label for="inputEmail3" >Nome do usuario</label>
-    <div class="col-sm-10">
-      <input type="text" name="nomeUsuario" class="form-control" id="inputEmail3" >
-    </div>
+     <div class="form-group">
+    <label for="inputAddress">Nome do usuário</label>
+    <input type="text" class="form-control" id="inputAddress" name="nomeUsuario">
   </div>
-  <div class="form-group row">
-    <label for="inputEmail3" >cpf do usuario</label>
-    <div class="col-sm-10">
-      <input type="text" name="cpfUsuario" class="form-control" id="inputEmail3" >
-    </div>
+  <div class="form-group">
+    <label for="inputAddress2">CPF do usuário</label>
+    <input type="text" class="form-control" id="inputAddress2" name="cpfUsuario">
   </div>
-  <div class="form-group row">
-    <label for="inputEmail3" >Telefone do usuario</label>
-    <div class="col-sm-10">
-      <input type="text" name="telefoneUsuario" class="form-control" id="inputEmail3">
-    </div>
+ 
+  <div class="form-group">
+    <label for="inputAddress2">Telefone do usuário</label>
+    <input type="text" class="form-control" id="inputAddress2" name="telefoneUsuario">
   </div>
-    <div class="form-group row">
-      <label for="inputEstado">Responsável pela Usuario</label>
-      <select id="inputEstado" name="responsavel" class="form-control">
-
-
-        <option>Selecione </option>
-        <?php
-        
-        $sql2 = "SELECT * from usuario u  order by u.nomeUsuario" ;
-        $result2 = $conn->query($sql2);
-        
-        while($socio2 = $result2->fetch_assoc()) { 
-        
-                ?>
-            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
-                                    <?php
-                                }
-        
-        ?>
-      </select>
-    </div>
-
-   
-
-                                
-    <div class="form-group">
-    Selecione uma logo: <input name="arquivo" type="file" />   
-    </div>
+ 
+ 
+ 
+ 
  </div>
 
 
