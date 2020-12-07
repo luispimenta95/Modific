@@ -240,8 +240,9 @@ $totalObras = mysqli_num_rows($resultadoObras);
         
    
 
-    <th> Ações </th>
+    <th> Ações de edição </th>
         
+    <th> Ações de imagem </th>
 
         </tr>
     </thead>
@@ -264,7 +265,6 @@ $totalObras = mysqli_num_rows($resultadoObras);
 <th>  <a href="#edicao<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
   <a href="#verObra<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span></button></a>
   
-  <a href="#novaImagem<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-camera' aria-hidden='true'></span></button></a>
   
   <!-- Adicionando imagens para uma obra -->
   <?php 
@@ -275,114 +275,71 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
 
 
- </th>
 
+
+</th>
+
+
+<th>  <a href="#verGaleria<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-camera' aria-hidden='true'></span></button></a>
+  <a href="#novaImagem<?php echo $row["idObra"] ?>" data-toggle="modal"><button type='button' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button></a>
+  
+  
+  <!-- Adicionando imagens para uma obra -->
+
+
+
+
+
+</th>
   <!-- ================================== Ver obra ========================== -->
 
 
-        <div id="verObra<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
+        <div id="verGaleria<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Ver dados de uma obra</h4>
+        <h4 class="modal-title">Ver imagens de uma obra</h4>
       </div>
       <div class="modal-body">
-      <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da obra</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["tituloObra"] ?>"readonly>
-    </div>
+      <?php 
+          $pesquisaImagens = "SELECT * from imagemObra i  where i.obra = " .$row["idObra"];
+          $imagens = mysqli_query($conn, $pesquisaImagens);
+
+          //Contar o total de logs
+          $totalImagens = mysqli_num_rows($imagens);
+
+          if($totalImagens == 0){
+
+              echo "Não existem imagens cadastradas para essa obra";
+
+          }
+     
+
+            $result_logs = "SELECT * from imagemObra i  where i.obra = " .$row["idObra"] ;
+
+
+            $resultado_logs = mysqli_query($conn, $result_logs);
+            $total_logs = mysqli_num_rows($resultado_logs);
+
+            while($lista = mysqli_fetch_assoc($resultado_logs)){?>
+                <div class="row">
+
+                <div class="col-6 col-md-4">
+
+<div class="card" >
+<img class="card-img-top img-thumbnail "  src="UP/<?php echo $lista["imagem"] ?>" >  <div class="card-body">
+   
+    <a href="#" class="btn btn-danger">Excluir</a>
   </div>
+</div>
+</div>
 
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Empresa responsável</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeEmpresa"] ?>"readonly>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Engenheiro responsável</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeUsuario"] ?>"readonly>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Data inicial</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-$dataView = explode("-",$row["dataInicial"]);  
-$dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-
-  echo $dataView;      
-      
-      
-      ?>" readonly>
-    </div>
-
-
-    
-  </div>
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Data provavel de entrega</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-$dataView = explode("-",$row["dataProvavel"]);  
-$dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-
-  echo $dataView;      
-      
-      
-      ?>"readonly>
-    </div>
-
-
-    
-  </div>
-
-
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Data  de entrega</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-$dataEntrega = $row["dataEntrega"];
-if($dataEntrega==null){
-  echo "Ainda não entregue";
-}
-else{
-  $dataView = explode("-",$row["dataEntrega"]);  
-  $dataView = $dataView[2]."/".$dataView[1]."/".$dataView[0];
-  
-    echo $dataView;
-}
- 
-      
-      
-      ?>"readonly>
-    </div>
-
-
-    
-  </div>
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-6 col-form-label">Situação da obra</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="nome02" value="<?php 
-echo $row["nomeStatus"];
-      
-      
-      ?>" readonly>
-    </div>
-
-
-    
-  </div>
-
+</div>
+            
+            <?php }  ?>
       </div>
       <div class="modal-footer">
 
@@ -395,6 +352,48 @@ echo $row["nomeStatus"];
 
 
 
+
+<form action="imagemObra.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
+
+
+<div id="novaImagem<?php echo $row["idObra"] ?>" class="modal fade" role="dialog" class="form-group">
+
+         <div class="modal-dialog">
+
+   <!-- Modal content-->
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+       
+       <h4 class="modal-title">Cadastro de imagens para a obra <?php echo $row["tituloObra"] ?></h4>
+     </div>
+     <div class="modal-body">
+
+   
+
+   
+
+                                
+    <div class="form-group">
+
+    <input type="file"  id="exampleInputEmail1"  name="arquivo[]" multiple="multiple">
+
+    </div>
+ </div>
+
+
+   
+     <div class="modal-footer">
+                    <button type="submit" class=" btn btn-primary">Realizar cadastro</button>
+
+       <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
+     </div>
+   </div>
+
+ </div>
+                       </div>
+         
+</form>
 
 <!-- ======================== FIM VER OBRAS ================== -->
 
