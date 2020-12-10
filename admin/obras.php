@@ -628,143 +628,111 @@ $statusObra = $result->fetch_assoc();
 
 
 
+<form action="cadastroObra.php" method="POST" class="form-group"  enctype="multipart/form-data">
+       
+       <div id="cadastro" class="modal fade" role="dialog" class="form-group">
+         <div class="modal-dialog">
 
-    <form action="cadastrarObra.php?id=<?php echo $row["idEmpresa"]; ?>" method="POST" enctype="multipart/form-data">
+   <!-- Modal content-->
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+       
+       <h4 class="modal-title">Cadastro de obra</h4>
+     </div>
+     <div class="modal-body">
 
-
-        <div id="obra<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Cadastrar uma obra</h4>
-      </div>
-      <div class="modal-body">
-      <div class="form-group">
-    <label for="exampleInputEmail1">Empresa responsável</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" name="nomeEmpresa" value="<?php echo $row["nomeEmpresa"] ?>" readonly>
-    </div>
-
-    <div class="form-group">
-    <label for="inputEmail3" class="form-group">Engenheiro responsavel</label>
-    <div class="form-group">
-      <select name="engenheiro" required>
-   <option >Selecione</option>
-        <?php 
-    //    $idselect=$row["id_cliente"];
-        $sql2 = "SELECT * from usuario u  where u. engenheiro =1 order by u.nomeUsuario";
-$result2 = $conn->query($sql2);
-
-while($engenheiro = $result2->fetch_assoc()) { 
-
-        ?>
-    <option value="<?php echo $engenheiro["idEngenheiro"]; ?>"><?php echo $engenheiro["nomeEngenheiro"];?></option>
-                            <?php
-                        }
-                    ?>
-</select>
-    </div>
-  </div>
-
-
-  <div class="form-group">
-    <label for="inputEmail3" class="form-group">Data de inicio</label>
-    <div class="form-group">
-    <input type="text" name="datIni" min="1900-01-01"max="2040-12-31" class="form-control"required>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-          Favor inserir conforme o padrão : 25/12/2019.
-        </small>
-    </div>
-  </div>
-
+     <div class="form-group">
+    <label for="exampleInputEmail1">Titulo da obra</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" name="tituloObra">
   
+  </div>
   <div class="form-group">
-    <label for="inputEmail3" class="form-group">Data de previsão para entrega</label>
-    <div class="form-group">
-    <input type="text" name="datFim" min="1900-01-01"max="2040-12-31" class="form-control"required>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-          Favor inserir conforme o padrão : 25/12/2019.
-        </small>
-    </div>
-  </div>
-      </div>
-      <div class="modal-footer">
-                     <button type="submit" class=" btn btn-primary">Confirmar dados</button>
-
-        <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
+    <label for="exampleInputPassword1">Data inicial</label>
+    <input type="text" class="form-control"  name = "dataIni">
+    <small id="emailHelp" class="form-text text-muted">Por Favor , insira conforme o padrão : 01/01/2020.</small>
 
   </div>
-</div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Data de previsão para entrega</label>
+    <input type="text" class="form-control"  name = "dataProv">
+    <small id="emailHelp" class="form-text text-muted">Por Favor , insira conforme o padrão : 01/01/2020.</small>
+
+  </div>
+  
+
+  <div class="form-group row">
+      <label for="inputEstado">Empresa esponsável pela obra</label>
+      <select id="inputEstado" name="empresa" class="form-control">
 
 
+        <option>Selecione </option>
+        <?php
+        
+        $sql2 = "SELECT * from empresa u  order by u.nomeEmpresa" ;
+        $result2 = $conn->query($sql2);
+        
+        while($socio2 = $result2->fetch_assoc()) { 
+        
+                ?>
+            <option value="<?php echo $socio2["idEmpresa"]; ?>"><?php echo $socio2["nomeEmpresa"];?></option>
+                                    <?php
+                                }
+        
+        ?>
+      </select>
+    </div>
+    <div class="form-group row">
+      <label for="inputEstado">Engenheiro esponsável pela obra</label>
+      <select id="inputEstado" name="responsavel" class="form-control">
 
 
+        <option>Selecione </option>
+        <?php
+        
+        $sql2 = "SELECT * from usuario u  order by u.nomeUsuario" ;
+        $result2 = $conn->query($sql2);
+        
+        while($socio2 = $result2->fetch_assoc()) { 
+        
+                ?>
+            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
+                                    <?php
+                                }
+        
+        ?>
+      </select>
+    </div>
+
+   
+
+                                
+  
+ </div>
+
+
+   
+     <div class="modal-footer">
+                    <button type="submit" class=" btn btn-primary">Realizar cadastro</button>
+
+       <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
+     </div>
+   </div>
+
+ </div>
+                       </div>
+         
 </form>
-<!-- ============== FIM cadastro de obras ============== -->
 
 
 
-        <?php } ?>
+          <?php } ?>
         </tr>
           
     </tbody>
   </table>
 
-  
-  
-       <?php
-$result_log = "SELECT * from obras";
-
-$obras = mysqli_query($conn, $result_log);
-
-//Contar o total de logs
-$totalObras = mysqli_num_rows($obras);
-$limitador =1;
-if($totalObras > $quantidade_pg){?>
-            <nav class="text-center">
-               <ul class="pagination">
-
-              <li><a href="dependentes.php?pagina=1"> Primeira página </a></li>
-
-
-                 <?php
-                for($i = $pagina - $limitador; $i <= $pagina-1; $i++){
-                  if($i>=1){
-                    ?>
-                        <li><a href="dependentes.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
-
-
-                  <?php }
-                }
-              ?>
-                <li class="active">  <span><?php echo $pagina; ?></span></li>
-
-                  <?php
-                      for ($i = $pagina+1; $i <= $pagina+$limitador; $i++){
-                        if($i<=$num_pagina){?>
-                              <li><a href="dependentes.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
-
-                  <?php }
-                      } 
-                        
-                      
-
-                   ?>
-              <li><a href="dependentes.php?pagina=<?php echo $num_pagina; ?>"> <span aria-hidden="true"> Ultima página </span></a></li>
-
-
-
-<?php } ?>
-</ul>
-</nav>
-               
-
-    <a href = "#obra"><button type="button" class="btn btn-dark">Gerar relatório </button>
-  
+  <a href="#cadastro" data-toggle="modal"><button type='button' class='btn btn-success'>Cadastrar empresa</button></a>
 
   </div>
 
