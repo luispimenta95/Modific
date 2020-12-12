@@ -128,59 +128,45 @@ $resultado_carousels = $conn->query($sql_carousel);
         <!--================End Creative Feature Area =================-->
 
         <!--================Industries Area =================-->
-        <section class="industries_area">
-            <div class="left_indus">
-                <div class="indus_img">
-                    <img src="img/indus-laptop.png" alt="">
-                </div>
-            </div>
-            <div class="right_indus">
-                <div class="indus_text">
-                    <div class="main_title">
-                        <h2>We Serve All Industries</h2>
-                        <p>We stay on top of our industry by being experts in yours. We measure our success by the results we drive for our clients.</p>
-                    </div>
-                    <div class="our_skill_inner">
-                        <div class="single_skill">
-                            <h3>Website Design</h3>
-                            <div class="progress" data-value="90">
-                                <div class="progress-bar">
-                                    <div class="progress_parcent"><span class="counter">90</span>%</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single_skill">
-                            <h3>Brand Strategy</h3>
-                            <div class="progress" data-value="95">
-                                <div class="progress-bar">
-                                    <div class="progress_parcent"><span class="counter">95</span>%</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single_skill">
-                            <h3>Digital Marketing</h3>
-                            <div class="progress" data-value="85">
-                                <div class="progress-bar">
-                                    <div class="progress_parcent"><span class="counter">85</span>%</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single_skill">
-                            <h3>Website Development</h3>
-                            <div class="progress" data-value="90">
-                                <div class="progress-bar">
-                                    <div class="progress_parcent"><span class="counter">90</span>%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="read_btn" href="#">Work with us</a>
-                </div>
-            </div>
-        </section>
+      
         <!--================End Industries Area =================-->
 
         <!--================Our Service Area =================-->
+        <section class="latest_news_area p_100">
+            <div class="container">
+                <div class="b_center_title">
+                    <h2>A empresa</h2>
+                    <p>Fundada sobre aspectos que priorizavam o bem estar de seus colaboradores e parceiros, tinha em princípios familiares a sua base. 
+                    Hoje, com mais de 30 anos de mercado, reforçando sempre tais princípios, consolidou uma imagem 
+                    forte e cada vez mais evidente no mercado atual. O seu formato moderno compreende exatamente a perfeita fusão entre 
+                    os princípios basilares e a expansão dos negócios por meio de processos definidos e o foco no 
+                    desenvolvimento e maximização dos ganhos do cliente parceiro.</p>
+                </div>
+                <div class="l_news_inner">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                       <strong> VONTADE DE CONCRETIZAR</strong>
+                        <br><br>
+
+                        A força que sustenta a Modific Construções e Reformas se encontra no fortalecimento constante das relações, 
+                        com processos compactos, definidos e completos, assim como técnicas 
+                        inovadoras e sustentáveis, em consonância com a maximização dos ganhos do cliente parceiro,
+                         que estará focado em seu negócio.
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                        <strong >RESPEITO E FUTURO</strong>
+                        <br><br>
+
+Inserir no mercado atual e futuro uma forma de processo pautada em princípios de colaboração e distribuição de vantagens, 
+sempre com foco na sustentabilidade e necessidades constantes de nossos clientes parceiros. 
+O foco do cliente parceiro deve estar em seu negócio. Assim delineamos a nossa missão!
+
+
+             
+                </div>
+            </div>
+        </section>
+
         <section class="service_area">
             <div class="container">
                 <div class="center_title">
