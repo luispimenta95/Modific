@@ -82,7 +82,7 @@ include 'conecta.php';
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                   <?php
-                   $sql_carousel = "SELECT * from imagemObra";
+                   $sql_carousel = "SELECT * from imagemObra i order by i.idImagem desc limit 4 ";
 $resultado_carousels = $conn->query($sql_carousel);
                   $qnt_slide = mysqli_num_rows($resultado_carousels);
                   $cont_marc = 0;
@@ -167,41 +167,64 @@ O foco do cliente parceiro deve estar em seu negócio. Assim delineamos a nossa 
             </div>
         </section>
 
-        <section class="service_area">
+        <section class="latest_news_area p_100">
             <div class="container">
-                <div class="center_title">
-                    <h2>Our Services</h2>
-                    <p>We Are A Creative Digital Agency. Focused on Growing Brands Online</p>
+                <div class="b_center_title">
+                    <h2>Nossas Obras</h2>
+                    <p>Conheça atrvés da nossa galeria um pouco mais do nosso trabalho</p>
                 </div>
-                <div class="row service_item_inner">
-                    <div class="col-lg-4">
-                        <div class="service_item">
-                            <i class="ti-ruler-pencil"></i>
-                            <h4>Website Design</h4>
-                            <p>The Fancy that recognize the talent and effort of the best web designers, developers and agencies in the world.</p>
+              
+                    <div class="row">
+                    
+                    <?php 
+$result_logs = "SELECT * FROM obra";
+$resultado_logs = mysqli_query($conn, $result_logs);
+$total_logs = mysqli_num_rows($resultado_logs);
+$marcadores =0;
+while($titulos = mysqli_fetch_assoc($resultado_logs)){ ?>
+                    <div class="col-lg-4 col-md-4">
+<a href="#verGaleria?id=<?php echo $titulos["idObra"] ?>">                       <strong> <?php echo $titulos["tituloObra"] ?></strong></a>
+                        <br><br>
+                        <?php 
+          $pesquisaCapa = "SELECT * from imagemObra i  where i.obra = " .$titulos["idObra"] . " and i.capa = 1";
+          $imgCapa = mysqli_query($conn, $pesquisaCapa);
+          $capa = mysqli_fetch_assoc($imgCapa);
+          
+          
+          ?>
+
+
+<div class="thumbnail">
+      
+        <img  src="admin/UP/<?php echo $capa["imagem"] ?>"  alt="Lights" style="width:100%">
+        </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="service_item">
-                            <i class="ti-desktop"></i>
-                            <h4>Website Development</h4>
-                            <p>The Fancy that recognize the talent and effort of the best web designers, developers and agencies in the world.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="service_item">
-                            <i class="ti-announcement"></i>
-                            <h4>Digital Marketing</h4>
-                            <p>The Fancy that recognize the talent and effort of the best web designers, developers and agencies in the world.</p>
-                        </div>
-                    </div>
-                </div>
+
+                        <!-- Modal -->
+                        
+                        <!-- Fim modal -->
+
+
+                        
+<?php } ?>
+
             </div>
         </section>
+
+
+
+        
+    
         <!--================End Our Service Area =================-->
 
         <!--================Testimonials Area =================-->
-        <section class="testimonials_area p_100">
+        <div class="b_center_title">
+                    <h2>Nossos  clientes</h2>
+                    <p>Conheça um pouco mais sobre o que nossos clientes dizem do nosso trabalho</p>
+                </div>
+
+
+        <section class="latest_news_area p_100">
             <div class="container">
                 <div class="testimonials_slider owl-carousel">
                     <div class="item">
@@ -240,62 +263,11 @@ O foco do cliente parceiro deve estar em seu negócio. Assim delineamos a nossa 
         <!--================End Testimonials Area =================-->
 
         <!--================Project Area =================-->
-        <section class="project_area">
-            <div class="container">
-                <div class="project_inner">
-                    <div class="center_title">
-                        <h2>Ready To Discuss Your Project? </h2>
-                        <p>There are many ways to contact us. You may drop us a line, give us a call or send an email, choose what suits you the most.</p>
-                    </div>
-                    <a class="tp_btn" href="#">WORK WITH US</a>
-                </div>
-            </div>
-        </section>
+        
         <!--================End Project Area =================-->
 
         <!--================Latest News Area =================-->
-        <section class="latest_news_area p_100">
-            <div class="container">
-                <div class="b_center_title">
-                    <h2>Latest News</h2>
-                    <p>We Are A Creative Digital Agency. Focused on Growing Brands Online</p>
-                </div>
-                <div class="l_news_inner">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6">
-                            <div class="l_news_item">
-                                <div class="l_news_img"><a href="#"><img class="img-fluid" src="img/blog/l-news/l-news-1.jpg" alt=""></a></div>
-                                <div class="l_news_content">
-                                    <a href="#"><h4>We Create Experiences</h4></a>
-                                    <p>The Fancy that recognize the talent and effort of the best web designers, develop-ers and agencies in the world.</p>
-                                    <a class="more_btn" href="#">Learn More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="l_news_item">
-                                <div class="l_news_img"><a href="#"><img class="img-fluid" src="img/blog/l-news/l-news-2.jpg" alt=""></a></div>
-                                <div class="l_news_content">
-                                    <a href="#"><h4>Simple, Fast And Fun</h4></a>
-                                    <p>The Fancy that recognize the talent and effort of the best web designers, develop-ers and agencies in the world.</p>
-                                    <a class="more_btn" href="#">Learn More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="l_news_item">
-                                <div class="l_news_img"><a href="#"><img class="img-fluid" src="img/blog/l-news/l-news-3.jpg" alt=""></a></div>
-                                <div class="l_news_content">
-                                    <a href="#"><h4>Device Friendly</h4></a>
-                                    <p>The Fancy that recognize the talent and effort of the best web designers, develop-ers and agencies in the world.</p>
-                                    <a class="more_btn" href="#">Learn More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+     
         <!--================End Latest News Area =================-->
 
         <!--================Footer Area =================-->
