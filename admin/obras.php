@@ -318,28 +318,47 @@ $totalObras = mysqli_num_rows($resultadoObras);
           }
      
 
-            $result_logs = "SELECT * from imagemObra i  where i.obra = " .$row["idObra"] ;
+
+?>
 
 
-            $resultado_logs = mysqli_query($conn, $result_logs);
-            $total_logs = mysqli_num_rows($resultado_logs);
+<div class="row">
+                    
+                    <?php 
+$result_logs = "SELECT * from imagemObra i  where i.obra = " .$row["idObra"] ;
+$resultado_logs = mysqli_query($conn, $result_logs);
+$total_logs = mysqli_num_rows($resultado_logs);
+$marcadores =0;
+while($lista = mysqli_fetch_assoc($resultado_logs)){ ?>
+                 <form action="updateCapa.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
 
-            while($lista = mysqli_fetch_assoc($resultado_logs)){?>
-                <div class="row">
+                     <div class="col-md-4">
+    <div class="thumbnail">
+      
+        <img  src="UP/<?php echo $lista["imagem"] ?>"  alt="Lights" style="width:100%">
+        <div class="caption">
+        <?php 
+        if ($lista["capa"] ==0){?>
+        
+        <a href="updateCapa.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente definir como capa ?')"> <button type="button" class="btn btn-primary btn-xs">Definir como capa</button></a>
+        <a href="delete.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
+<?php } else{?>
+  <a href="delete.php?id=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
 
-                <div class="col-6 col-md-4">
 
-<div class="card" >
-<img class="card-img-top img-thumbnail "  src="UP/<?php echo $lista["imagem"] ?>" >  <div class="card-body">
-   
-    <a href="#" class="btn btn-danger">Excluir</a>
+<?php }?>
+
+<input type="text" name="obra" value="<?php echo $row["idObra"]?>">
+        </div>
+      </a>
+    
   </div>
-</div>
-</div>
-
-</div>
-            
-            <?php }  ?>
+                      
+                        </div>
+                        </form>
+                        
+<?php } ?>
+            </div>
       </div>
       <div class="modal-footer">
 
@@ -417,7 +436,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
 <div class="form-group row">
     <label for="inputEmail3" class="col-sm-2 col-form-label">Titulo da obra</label>
     <div class="col-sm-10">
-      <input type="text" name="titulo" class="form-control" id="inputEmail3" value="<?php echo $row["tituloObra"]?>">
+    <input type="text" name="titulo" class="form-control" id="inputEmail3" value="<?php echo $row["tituloObra"]?>">
     </div>
   </div>
   <div class="form-group row">

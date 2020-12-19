@@ -1,507 +1,398 @@
 <?php 
-session_start();
 include 'conecta.php';
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-  <title>LEGRANO ORGÂNICOS</title>
-  <link rel="stylesheet" href="admin/css/index.css">
+        <link rel="icon" href="img/fav-icon.png" type="image/x-icon" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Fancy</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="admin/css/estilo1.css">
-<link rel="shortcut icon" href="admin/assets/images/legrano/icon.jpg""  />
+        <!-- Icon css link -->
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="vendors/elegant-icon/style.css" rel="stylesheet">
+        <link href="vendors/themify-icon/themify-icons.css" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
 
-  
+        <!-- Rev slider css -->
+        <link href="vendors/revolution/css/settings.css" rel="stylesheet">
+        <link href="vendors/revolution/css/layers.css" rel="stylesheet">
+        <link href="vendors/revolution/css/navigation.css" rel="stylesheet">
+        <link href="vendors/animate-css/animate.css" rel="stylesheet">
 
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <!-- Extra plugin css -->
+        <link href="vendors/owl-carousel/owl.carousel.min.css" rel="stylesheet">
 
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/responsive.css" rel="stylesheet">
 
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
 
-</head>
-<body class="fundo">
+        <!--================Search Area =================-->
+        <section class="search_area">
+            <div class="search_inner">
+                <input type="text" placeholder="Enter Your Search...">
+                <i class="ti-close"></i>
+            </div>
+        </section>
+        <!--================End Search Area =================-->
 
-  
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-          <a class="navbar-brand" href="#">  <img src="admin/assets/images/legrano/icon.jpg" width="30" height="30" alt=""><!--Legrano Orgânicos --></a>
-      <button type="button" class="navbar-toggle " data-toggle="collapse" data-target="#myNavbar">
+        <!--================Header Menu Area =================-->
+        <header class="main_menu_area">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Pages</a></li>
+                        <li class="nav-item"><a  href="static.html">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact</a></li>
+                    </ul>
+                    <ul class="navbar-nav justify-content-end">
+                        <li><a href="#"><i class="icon_search"></i></a></li>
+                        <li><a href="#"><i class="icon_bag_alt"></i></a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!--================End Header Menu Area =================-->
+
+        <!--================Slider Area =================-->
+        <section class="main_slider_area">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <?php
+                   $sql_carousel = "SELECT * from imagemObra i order by i.idImagem desc limit 4 ";
+$resultado_carousels = $conn->query($sql_carousel);
+                  $qnt_slide = mysqli_num_rows($resultado_carousels);
+                  $cont_marc = 0;
+                  while($cont_marc < $qnt_slide){
+                    echo "<li id='valor-car' data-target='#myCarousel' data-slide-to='$cont_marc'></li>";
+                    $cont_marc++;
+                  }
+                  ?>
+                </ol>
+                <div class="carousel-inner">
+
+                  <?php
+                  $cont_slide = 0;
+                  while( $row_slide = mysqli_fetch_assoc($resultado_carousels)){
+                    $active = "";
+                    if($cont_slide == 0){
+                      $active = "active";
+                    }
+                    echo "<div class='carousel-item $active'>";
+                    echo "<img class='d-block w-100' src='admin/UP/".$row_slide['imagem']."'>";
+                    echo "</div>";
+                    $cont_slide++;
+                  }
+                  ?>
+                </div>
+                <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+              
+              
+        
+        </section>
+        <!--================End Slider Area =================-->
+
+        <!--================Creative Feature Area =================-->
+       
+        <!--================End Creative Feature Area =================-->
+
+        <!--================Industries Area =================-->
       
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a target="_self" href="#what-we-do">QUEM SOMOS</a></li>
-        <li><a href="#fazenda">CLUB LEGRANO</a></li>
-        <li><a href="#cestas">PLANO DE CESTAS</a></li>
-     <li><a href="#contato">CONTATO</a></li>
-      <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> CLUB DE SÓCIOS</a></li>
-      <?php
-                          $telefone = 5561999789022;
+        <!--================End Industries Area =================-->
 
-      ?>
-      <li><a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo $telefone ?>"> <button class="btn-sm btn-success"><i class="fa fa-whatsapp"></i></button></a></li>
-     
-        </ul>
-    </div>
-  </div>
-</nav> 
+        <!--================Our Service Area =================-->
+        <section class="latest_news_area p_100">
+            <div class="container">
+                <div class="b_center_title">
+                    <h2>A empresa</h2>
+                    <p>Fundada sobre aspectos que priorizavam o bem estar de seus colaboradores e parceiros, tinha em princípios familiares a sua base. 
+                    Hoje, com mais de 30 anos de mercado, reforçando sempre tais princípios, consolidou uma imagem 
+                    forte e cada vez mais evidente no mercado atual. O seu formato moderno compreende exatamente a perfeita fusão entre 
+                    os princípios basilares e a expansão dos negócios por meio de processos definidos e o foco no 
+                    desenvolvimento e maximização dos ganhos do cliente parceiro.</p>
+                </div>
+                <div class="l_news_inner">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                       <strong> VONTADE DE CONCRETIZAR</strong>
+                        <br><br>
 
+                        A força que sustenta a Modific Construções e Reformas se encontra no fortalecimento constante das relações, 
+                        com processos compactos, definidos e completos, assim como técnicas 
+                        inovadoras e sustentáveis, em consonância com a maximização dos ganhos do cliente parceiro,
+                         que estará focado em seu negócio.
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                        <strong >RESPEITO E FUTURO</strong>
+                        <br><br>
 
- <!--
- <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle " data-toggle="collapse" data-target="#myNavbar">
-
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#"></a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a target="_self" href="#what-we-do">QUEM SOMOS</a></li>
-        <li><a href="#fazenda">CLUB LEGRANO</a></li>
-        <li><a href="#cestas">PLANO DE CESTAS</a></li>
-     <li><a href="#contato">CONTATO</a></li>
-      <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> CLUB DE SÓCIOS</a></li>
-     
-        </ul>
-    </div>
-  </div>
-</nav> 
- -->
-<!--<nav class="navbar navbar-inverse">
-  <div  class="container-fluid ">
-    <div class="navbar-header ">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">HOME</a>
-    </div>
-    <div class="collapse navbar-collapse " id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="nav-item">
-        <a class="nav-link" href="#what-we-do">QUEM SOMOS</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#fazenda">CLUB LEGRANO</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#cestas">PLANO DE CESTAS</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#contato">FALE CONOSCO</a>
-      </li>
-
-      <li class="nav-item"><a href="login.php"><span class="glyphicon glyphicon-user"></span> CLUB DE SÓCIOS</a></li>
-      
-      
-      </ul>
-     
-    </div>
-  </div>
-</nav>
- -->
-    <div class="text-right">
-  <?php
-
-                    $telefone = 5561999789022;
-                    ?>
+Inserir no mercado atual e futuro uma forma de processo pautada em princípios de colaboração e distribuição de vantagens, 
+sempre com foco na sustentabilidade e necessidades constantes de nossos clientes parceiros. 
+O foco do cliente parceiro deve estar em seu negócio. Assim delineamos a nossa missão!
 
 
-<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo $telefone ?>"> <button class="btn-lg btn-success"><i class="fa fa-whatsapp"></i></button></a>
- </div>         
-<section>
-    
+             
+                </div>
+            </div>
+        </section>
 
- <div id="myCarousel" class="carousel slide" data-ride="carousel">
-  <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <?php
-
-    $result_logs = "SELECT p.id_promocao,imagem,ativo,nome_promocao,data from promocoes p where p.ativo =1 and p.publico =1 order by p.nome_promocao ";
-    $resultado_logs = mysqli_query($conn, $result_logs);
+        <section class="latest_news_area p_100">
+            <div class="container">
+                <div class="b_center_title">
+                    <h2>Nossas Obras</h2>
+                    <p>Conheça atrvés da nossa galeria um pouco mais do nosso trabalho</p>
+                </div>
+              
+                    <div class="row">
+                    
+                    <?php 
+$result_logs = "SELECT * FROM obra";
+$resultado_logs = mysqli_query($conn, $result_logs);
 $total_logs = mysqli_num_rows($resultado_logs);
 $marcadores =0;
-  while($row = mysqli_fetch_assoc($resultado_logs)){ ?>
-      <li data-target="#myCarousel" data-slide-to=<?php echo $marcadores ?> class="active"></li>
-
-
-<?php 
-$marcadores++;
-}
-?> 
-   </ol>
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <?php
-            $controle_ativo = 2;            
-            $result_carousel = "SELECT p.id_promocao,imagem,ativo,nome_promocao,data from promocoes p where p.ativo =1 and p.publico =1 order by p.id_promocao desc ";
-            $resultado_carousel = mysqli_query($conn, $result_carousel);
-            while($row_carousel = mysqli_fetch_assoc($resultado_carousel)){ 
-              if($controle_ativo == 2){ ?>
-                <div class="item active">
-                  <img src="admin/UP/<?php echo $row_carousel['imagem']; ?> " alt="<?php echo $row_carousel['nome_promocao']; ?>"style="width:100%;">
-                </div><?php
-                $controle_ativo = 1;
-              }else{ ?>
-                <div class="item">
-                  <img src="admin/UP/<?php echo $row_carousel['imagem']; ?>" alt="<?php echo $row_carousel['nome_promocao']; ?>" style="width:100%;">
-                </div> <?php
-              }
-            }
-          ?>      
-      
-    </div>
-
-
-  </section>
-
-
-   <section id="what-we-do" class="fundo">
-        <div class="container-fluid fundo">
-<h2 class="text-center font-weight-bold bg-dark text-success"><strong>Quem somos</strong></h2>
-            <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
-                    <div class="card ">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">SOBRE A LEGRANO</h3></strong>
-                            <strong><p class="card-text bg-dark text-success text-justify">
-                            <strong>A Legrano Orgânicos é uma marca premium de produtos orgânicos de produção própria, uma opção saudável a quem tem como prioridade uma alimentação mais equilibrada e nutritiva, com produtos diferenciados. Somos uma empresa familiar com valores fincados na agricultura orgânica:
-                            <ul>
-<li class=" bg-dark text-success"> Economicamente viável </li>
-<li class=" bg-dark text-success"> Ecologicamente correto </li>
-<li class=" bg-dark text-success"> Socialmente justos </li>
-</ul>                            
-                            
-                            
-                            </p></strong>
-                           
-                        </div>
-                    </div>
-                </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
-                    <div class="card">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">ORGÂNICOS SELECIONADOS E CERTIFICADOS </h3></strong>
-                            <strong><p class="card-text bg-dark text-success text-justify">
-                            As verduras, legumes e frutas da Legrano Orgânicos  são cultivadas em sua maioria, na propriedade da nossa família, denominada Fazenda Proteção Divina, de forma orgânica, de acordo com a legislação exigida pelo Ministério da Agricultura, Pecuária e Abastecimento (MAPA) e pelo Instituto Nacional de Metrologia, Normalização e Qualidade Industrial (Inmetro), recebendo os selos de Produto Orgânico e Ecocert.
-                            
-                            </p></strong>
-                            </div>
-                    </div>
-                </div>
-
- <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
-                    <div class="card">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">NATURAIS E SAUDÁVEIS</h3><strong>
-                            <p class="card-text bg-dark text-success text-justify">Além dos produtos orgânicos, na Legrano você também encontra uma grande variedade de produtos naturais e saudáveis. Nosso objetivo é oferecer cada vez mais uma variedade maior de produtos, para você e sua família se alimentarem cada vez melhor. Oferecemos uma opção de alimentação saudável para a sociedade, sustentada por um modelo de atuação responsável.
-</p>
-                           
-                        </div>
-                    </div>
-                </div>
-
-   
-            </div>
-            <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-4  col-lg-4 col-xl-4">
-                    <div class="card">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">1º PILAR : ECOLOGICAMENTE CORRETO</h3></strong>
-                            <strong><p class="card-text bg-dark text-success text-justify">Com produção própria de FOLHAGENS, LEGUMES e HORTALIÇAS, estabelecemos o equilíbrio com a natureza, utilizando técnicas naturais de adubação e controle do solo e de pragas, baseado em sistemas ecológicos vivos e cíclicos, trabalhando com eles, imitando-os e ajudando a mantê-los.
-Este pilar privilegia a qualidade de vida do ser humano e a preservação do meio ambiente.
-</p></strong>
-                           
-                        </div>
-                    </div>
-                </div>
-                          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4  col-xl-4">
-                    <div class="card">
-                        <div class="card-block ">
-             <strong>               <h3 class="card-title bg-dark text-success">2º PILAR: ECONOMICAMENTE VIÁVEL</h3></strong>
-                            <p class="card-text bg-dark text-success text-justify">A agricultura orgânica é considerada distante da realidade de muitos, mas a LEGRANO ORGÂNICOS tem essa preocupação e atua no mercado de forma a viabilizar o acesso aos alimentos orgânicos.
-Os produtos de produção própria não passam por atravessadores, vão da fazenda direto para sua mesa, e isso torna viável uma prática de preço acessível, fazendo disso o nosso segundo pilar sendo ECONOMICAMENTE VIÁVEL.
-Com preços acessíveis, a população pode se alimentar mais e melhor!
-</p>
-                           
-                        </div>
-                    </div>
-                </div>
-                          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4 ">
-                    <div class="card">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">3º PILAR: SOCIALMENTE JUSTO </h3></strong>
-                            <strong><p class="card-text bg-dark text-success text-justify">Como produtores da agricultura orgânica, ser SOCIALMENTE JUSTO não poderia deixar de ser um de nossos pilares.
-A LEGRANO ORGÂNICOS tem esse compromisso em retribuir o que faz de melhor para a sociedade. Além de praticar preços justos, mantém uma tabela de preços praticamente estáveis durante todo o ano. 
-Nosso objetivo é oferecer o que há de melhor para você e sua família de forma justa, por este motivo os nossos produtos são cuidadosamente selecionados e embalados.
-
-</p></strong>
-                           
-                        </div>
-                    </div>
-                </div>
-                    </div>
-                </div>
-      
+while($titulos = mysqli_fetch_assoc($resultado_logs)){ ?>
+                    <div class="col-lg-4 col-md-4">
+<a href="#verGaleria?id=<?php echo $titulos["idObra"] ?>">                       <strong> <?php echo $titulos["tituloObra"] ?></strong></a>
+                        <br><br>
+                        <?php 
+          $pesquisaCapa = "SELECT * from imagemObra i  where i.obra = " .$titulos["idObra"] . " and i.capa = 1";
+          $imgCapa = mysqli_query($conn, $pesquisaCapa);
+          $capa = mysqli_fetch_assoc($imgCapa);
           
-    
-    </section>
-
-
-    <section class="fundo">
-
-    <h2 id="fazenda" class="text-center font-weight-bold bg-dark text-success"><strong>FAÇA PARTE DO CLUB LEGRANO</strong></h2>
-
-<div class="container content">
-    <div class="row">
-        <!-- Pricing -->
-       
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    -->
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <div class="item active">
-         
-        <img src="admin/assets/images/legrano/2.jpg" alt="Los Angeles" style="width:100%;">
-      </div>
-     
-    </div>
-
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-</section>
-
-  <section id="what-we-do ">
-        <div class="container-fluid fundo">
-            <h1 id="club" class="text-center font-weight-bold bg-dark text-success"><strong>CLUB LEGRANO</strong></h1>
-<h3>><strong><p class="text-center bg-dark text-success text-justify">CLUB LEGRANO é um clube de vantagens para clientes LEGRANO.</p></strong></h3>
-                                          <div class="row mt-5">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <div class="card fundo">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">Veja como se associar ao CLUB LEGRANO</h3></strong>
-                            <strong><p class="card-text bg-dark text-success">No CLUB LEGRANO o consumidor se associa adquirindo um cartão de consumo, e conforme sua necessidade vai creditando novos valores.
-A cada valor mínimo de R$ 100,00 creditado, o associado ganha um bônus adicional de 10% sobre o valor. </p></strong>
-                           
-                        </div>
-                    </div>
-                </div>
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <div class="card">
-                        <div class="card-block ">
-                            <strong><h3 class="card-title bg-dark text-success">VANTAGENS DO CLUB</h3></strong>
-                            <strong><p class="card-text bg-dark text-success text-justify"></strong>
-             <ul>
-  <strong><li class=" bg-dark text-success">10% DE BÔNUS do valor creditado válido para compra de qualquer produto da loja</li></strong>
-  <strong><li class=" bg-dark text-success">VANTAGEM EM DOBRO nas promoções</li></strong>
-  <strong><li class=" bg-dark text-success">Entrega grátis no PLANO DE CESTAS</li></strong>
-  <strong><li class=" bg-dark text-success">Entrega grátis no DELIVERY para pedido mínimo de R$50,00</li></strong>
-  <strong><li class=" bg-dark text-success">Promoções EXCLUSIVAS</li></strong>
-</ul> 
-                                
-                                
-                            </p>
-                            </div>
-                    </div>
-                </div>
-
- 
-
-   
-            </div>
-
-
-    </section>
-
-
-    <section class="fundo">
-  
-
-
-
- <h2 id="cestas" class="text-center font-weight-bold bg-dark text-success"><strong>CONTRATE UM PLANO DE CESTAS LEGRANO</strong></h2>
-
-<div class="container content">
-    <div class="row">
-        <!-- Pricing -->
-       
-
-    
-          <div class="col-md-4">
-            <div class="pricing hover-effect">
-               
-<img  src="admin/assets/images/legrano/cesta1.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-              
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="pricing hover-effect">
-               
-<img  src="admin/assets/images/legrano/cesta2.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-            </div>
-        </div>
-           
-    <div class="col-md-4">
-            <div class="pricing hover-effect">
-               
-<img  src="admin/assets/images/legrano/cesta3.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-            
-            </div>
-        </div>
-        <br><br>
-       
-    </section>
-
-
-    <div class="text-center">
-  <?php
-
-                            $telefone = 5561999789022;
-            
-                    ?>
-
-
-<h3 class="bg-dark text-success">FAÇA SEU PEDIDO DE DELIVERY </h3><a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo $telefone ?>"> <button class="btn-lg btn-success"><i class="fa fa-whatsapp"></i></button></a>
- </div>  
-    <section class="fundo">
-      <h2 id="contato" class="text-center bg-dark text-success"><strong>Entre em contato</strong></h2>
-<div class="container">
-    <div class="row">
-        <div class="col">
           
+          ?>
+
+
+<div class="thumbnail">
+      
+        <img  src="admin/UP/<?php echo $capa["imagem"] ?>"  alt="Lights" style="width:100%">
         </div>
-
-        <div class="col-12 col-sm-6">
-            <div class="card bg-light mb-3">
-                <div class="card-header bg-dark text-success text-uppercase">Informações de contato</div>
-                <div class="card-body">
-                    <br>
-                    <p class="bg-dark text-success"><i class="fa fa-phone-square"> (61)3389.8415 | 99978.9022</i></p>
-                    <p class="bg-dark text-success"><i class="fa fa-map-marker"> Avenida Floriano Peixoto Q68A LT 4 Lj 1 - Planaltina DF</i></p>
-                    <p class="bg-dark text-success"><i class="fa fa-envelope"> contato@legrano.com.br</p></i>
-                    <p class="bg-dark text-success"><a class="bg-dark text-success" target="_blank" href="https://www.instagram.com/legranoorganicos/?hl=pt-br"><i class="fa fa-instagram"> Nos siga no Instagram</i></a></p>
-                    <p class="bg-dark text-success"><a class="bg-dark text-success" target="_blank" href="https://www.facebook.com/clublegrano/"><i class="fa fa-facebook"> Curta nossa página no Facebook</i></a></p>
-
-                </div>
-
-            </div>
-        </div>
-
-              <div class="col-12 col-sm-6">
-            <div class="card bg-light mb-3">
-                <div class="card-header bg-dark text-success text-uppercase"><i class="fa fa-envelope-o"></i> Nos envie uma mensagem</div>
-                <div class="card-body">
-                    	<?php
-		if(isset($_SESSION['msg_envio'])){
-			echo $_SESSION['msg_envio'];
-			unset($_SESSION['msg_envio']);
-		}
-		?>
-              <form method="POST" action="mensagem.php">
-                           <div class="form-group">
-                            <label for="name" class=" bg-dark text-success">Nome</label>
-                            <input type="text" class="form-control  bg-dark text-success" id="name" aria-describedby="emailHelp" name="nomeM" placeholder="Digite um nome" required>
                         </div>
-                         <div class="form-group">
-                            <label for="email" class=" bg-dark text-success">Telefone</label>
-                            <input type="text" class="form-control  bg-dark text-success" id="email" aria-describedby="emailHelp" placeholder="Digite seu telefone de contato" name="telefoneM" required>
-                            <small id="emailHelp" class="form-text text-muted">Não iremos compartilhar seus dados.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class=" bg-dark text-success">Email</label>
-                            <input type="email" class="form-control  bg-dark text-success" id="email" aria-describedby="emailHelp" placeholder="Digite um email válido" name="emailM" required>
-                            <small id="emailHelp" class="form-text text-muted">Não iremos compartilhar seus dados.</small>
-                        </div>
-                        <div class="form-group">
-                            <label  for="message" class=" bg-dark text-success">Mensagem</label>
-                            <textarea class="form-control" id="message" rows="6" name="mensagem01" required></textarea>
-                        </div>
+
+                        <!-- Modal -->
                         
-                              <div class="form-group">
-                               
-                                <label for="name" class=" bg-dark text-success">Confirme sua identidade</label>
-                            <input type="text" class="form-control  bg-dark text-success" id="name" aria-describedby="emailHelp" name="captcha" placeholder="Digite o código a seguir" required>
-                               <img src="captcha.php" alt="Código captcha"><br>
-			
-			
-                       
-                        </div>
+                        <!-- Fim modal -->
 
-                        <div class="mx-auto">
 
-                        <button type="submit" class="btn btn-primary text-right">Enviar</button></div>
+                        
+<?php } ?>
+
+            </div>
+        </section>
 
 
 
+        
+    
+        <!--================End Our Service Area =================-->
 
-                    </form>
-
+        <!--================Testimonials Area =================-->
+        <div class="b_center_title">
+                    <h2>Nossos  clientes</h2>
+                    <p>Conheça um pouco mais sobre o que nossos clientes dizem do nosso trabalho</p>
                 </div>
 
+
+        <section class="latest_news_area p_100">
+            <div class="container">
+                <div class="testimonials_slider owl-carousel">
+                    <div class="item">
+                        <div class="media">
+                            <img class="d-flex rounded-circle" src="img/testimonials-1.png" alt="">
+                            <div class="media-body">
+                                <img src="img/dotted-icon.png" alt="">
+                                <p>I wanted to mention that these days, when the opposite of good customer and tech support tends to be the norm, it’s always great having a team like you guys at Fancy! So, be sure that I’ll always spread the word about how good your product is and the extraordinary level of support that you provide any time there is any need for it.</p>
+                                <h4><a href="#">Aigars Silkalns</a> - CEO DeerCreative</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="media">
+                            <img class="d-flex rounded-circle" src="img/testimonials-1.png" alt="">
+                            <div class="media-body">
+                                <img src="img/dotted-icon.png" alt="">
+                                <p>I wanted to mention that these days, when the opposite of good customer and tech support tends to be the norm, it’s always great having a team like you guys at Fancy! So, be sure that I’ll always spread the word about how good your product is and the extraordinary level of support that you provide any time there is any need for it.</p>
+                                <h4><a href="#">Aigars Silkalns</a> - CEO DeerCreative</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="media">
+                            <img class="d-flex rounded-circle" src="img/testimonials-1.png" alt="">
+                            <div class="media-body">
+                                <img src="img/dotted-icon.png" alt="">
+                                <p>I wanted to mention that these days, when the opposite of good customer and tech support tends to be the norm, it’s always great having a team like you guys at Fancy! So, be sure that I’ll always spread the word about how good your product is and the extraordinary level of support that you provide any time there is any need for it.</p>
+                                <h4><a href="#">Aigars Silkalns</a> - CEO DeerCreative</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+        <!--================End Testimonials Area =================-->
 
-
-    </section>
-    
-    <section>
+        <!--================Project Area =================-->
         
-        <footer>
-            <div class= "align-middle" >
-                <hr>
-              <strong> <h4  class=" bg-dark text-success"> Razão social : LEGRANO ORGÂNICOS EIRELI <br> CNPJ : 30.019.956.0001-04</h4></strong>
-                
+        <!--================End Project Area =================-->
+
+        <!--================Latest News Area =================-->
+     
+        <!--================End Latest News Area =================-->
+
+        <!--================Footer Area =================-->
+        <footer class="footer_area">
+            <div class="footer_widgets_area">
+                <div class="container">
+                    <div class="f_widgets_inner row">
+                        <div class="col-lg-3 col-md-6">
+                            <aside class="f_widget subscribe_widget">
+                                <div class="f_w_title">
+                                    <h3>Our Newsletter</h3>
+                                </div>
+                                <p>Subscribe to our mailing list to get the updates to your email inbox.</p>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="E-mail" aria-label="E-mail">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary submit_btn" type="button">Subscribe</button>
+                                    </span>
+                                </div>
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                </ul>
+                            </aside>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <aside class="f_widget twitter_widget">
+                                <div class="f_w_title">
+                                    <h3>Twitter Feed</h3>
+                                </div>
+                                <div class="tweets_feed"></div>
+                            </aside>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <aside class="f_widget categories_widget">
+                                <div class="f_w_title">
+                                    <h3>Link Categories</h3>
+                                </div>
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Agency</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Studio</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Studio</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Blogs</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Shop</a></li>
+                                </ul>
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Home</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Services</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Work</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy</a></li>
+                                </ul>
+                            </aside>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <aside class="f_widget contact_widget">
+                                <div class="f_w_title">
+                                    <h3>Contact Us</h3>
+                                </div>
+                                <a href="#">1 (800) 686-6688</a>
+                                <a href="#">info.deercreative@gmail.com</a>
+                                <p>40 Baria Sreet 133/2 <br />NewYork City, US</p>
+                                <h6>Open hours: 8.00-18.00 Mon-Fri</h6>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
+            <div class="copy_right_area">
+                <div class="container">
+                    <div class="float-md-left">
+                        <h5>Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></h5>
+                    </div>
+                    <div class="float-md-right">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Disclaimer</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Privacy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Advertisement</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Contact us</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </footer>
-        
-    </section>
-    <script type="text/javascript">
-    	
-    	 $(document).on('click','.navbar-collapse.in',function(e) {
-    if( $(e.target).is('a') ) {
-        $(this).collapse('hide');
-    }
-});
+        <!--================End Footer Area =================-->
 
-    </script>
-    
-</body>
+
+
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <!-- Rev slider js -->
+        <script src="vendors/revolution/js/jquery.themepunch.tools.min.js"></script>
+        <script src="vendors/revolution/js/jquery.themepunch.revolution.min.js"></script>
+        <script src="vendors/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+        <script src="vendors/revolution/js/extensions/revolution.extension.video.min.js"></script>
+        <script src="vendors/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+        <script src="vendors/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+        <script src="vendors/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+        <script src="vendors/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+        <!-- Extra plugin css -->
+        <script src="vendors/counterup/jquery.waypoints.min.js"></script>
+        <script src="vendors/counterup/jquery.counterup.min.js"></script>
+        <script src="vendors/counterup/apear.js"></script>
+        <script src="vendors/counterup/countto.js"></script>
+        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+        <script src="vendors/parallaxer/jquery.parallax-1.1.3.js"></script>
+        <!--Tweets-->
+        <script src="vendors/tweet/tweetie.min.js"></script>
+        <script src="vendors/tweet/script.js"></script>
+
+        <script src="js/theme.js"></script>
+    </body>
 </html>
