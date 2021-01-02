@@ -39,6 +39,7 @@ else{
   $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario
   order by e.nomeEmpresa";
 }
+//preciso fazer as pesquisas
 
 
 $resultadoObras = mysqli_query($conn, $pesquisaObras);
