@@ -97,9 +97,11 @@ $totalObras = mysqli_num_rows($resultadoObras);
       <!-- start: header -->
        <header class="header">
 <div class="logo-container">
-<a href="../" class="logo">
+  <?php if($_SESSION["logado"]){?>
+<a href = "home.php" class="logo">
 <img src="assets/images/logo2.jpg" height="35" alt="Legrano Orgânicos">
 </a>
+<?php }?>
 <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
 <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
 </div>
@@ -117,7 +119,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
 </figure>
 <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@JSOFT.com">
 <span class="name"><?php echo $_SESSION["nomeAdministrador"] ?></span>
-<span class="role">Legrano | Administrativo</span>
+<span class="role">Modific | Administrativo</span>
 
 </div>
 <i class="fa custom-caret"></i>
@@ -153,13 +155,10 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
             <ul class="list-group">
 <a href="home.php"> <li class="list-group-item">Home</li></a>
-  <a href="clientes.php"> <li class="list-group-item">Sócios </li></a>
 <a href="empresas.php"> <li class="<?php if($pagina_atual="empresas.php"){echo "list-group-item active";}else{echo "list-group-item";} ?>">Empresas </li></a>
-  <a href="movimentacoes.php"> <li class="list-group-item">Registros financeiros </li></a>
-    <a href="log.php"> <li class="list-group-item">Registros de cadastro</li></a>
-    
-<a href="mensagens.php"> <li class="list-group-item">Mensagens </li></a>
-<a href="promocoes.php"> <li class="list-group-item">Promoções </li></a>
+  <a href="usuarios.php"> <li class="list-group-item">Usuários </li></a>
+    <a href="obras.php"> <li class="list-group-item">Obras</li></a>
+
 
 
 
@@ -170,7 +169,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
     <div class="card-header" id="headingOne">
       <h5 class="mb-0">
         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-Filtar compradores por nome
+Filtar empresas por nome
 
         </button>
       </h5>

@@ -9,7 +9,7 @@ include '../funcoes.php';
 
 mysqli_set_charset( $conn, 'utf8');
 $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
-  $pagina_atual = "dependentes.php";
+  $pagina_atual = "obras.php";
 //Selecionar todos os logs da tabela
 $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
  entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
@@ -62,9 +62,9 @@ $totalObras = mysqli_num_rows($resultadoObras);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-<title>Legrano | Área administrativa</title>
+<title>Modific | Área administrativa</title>
     <meta name="keywords" content="HTML5 Admin Template" />
-    <meta name="description" content="Legrano Orgânicos - Responsive HTML5 Template">
+    <meta name="description" content="Modific  - Responsive HTML5 Template">
     <meta name="author" content="JSOFT.net">
 
     <!-- Mobile Metas -->
@@ -104,9 +104,12 @@ $totalObras = mysqli_num_rows($resultadoObras);
       <!-- start: header -->
        <header class="header">
 <div class="logo-container">
-<a href="../" class="logo">
-<img src="assets/images/logo2.jpg" height="35" alt="Legrano Orgânicos">
+<?php 
+  if($_SESSION["logado"]){?>
+<a href="home.php" class="logo">
+<img src="assets/images/logo2.jpg" height="35" alt="Modific Orgânicos">
 </a>
+<?php }?>
 <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
 <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
 </div>
@@ -124,7 +127,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
 </figure>
 <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@JSOFT.com">
 <span class="name"><?php echo $_SESSION["nomeAdministrador"] ?></span>
-<span class="role">Legrano | Administrativo</span>
+<span class="role">Modific | Administrativo</span>
 
 </div>
 <i class="fa custom-caret"></i>
@@ -160,14 +163,11 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
             <ul class="list-group">
 <a href="home.php"> <li class="list-group-item">Home</li></a>
-  <a href="clientes.php"> <li class="list-group-item">Sócios </li></a>
-<a href="dependentes.php"> <li class="<?php if($pagina_atual="dependentes.php"){echo "list-group-item active";}else{echo "list-group-item";} ?>">Dependentes </li></a>
-  <a href="movimentacoes.php"> <li class="list-group-item">Registros financeiros </li></a>
-    <a href="log.php"> <li class="list-group-item">Registros de cadastro</li></a>
-    
-<a href="mensagens.php"> <li class="list-group-item">Mensagens </li></a>
-<a href="promocoes.php"> <li class="list-group-item">Promoções </li></a>
+  <a href="empresas.php"> <li class="list-group-item">Empresas </li></a>
+ <a href="usuarios.php"> <li class="list-group-item">Usuários </li></a>
 
+<a href="obras.php"> <li class="<?php if($pagina_atual="obras.php"){echo "list-group-item active";}else{echo "list-group-item";} ?>">Obras </li></a>
+ 
 
 
 
@@ -177,7 +177,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
     <div class="card-header" id="headingOne">
       <h5 class="mb-0">
         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-Filtar compradores por nome
+Filtar obras por nome
 
         </button>
       </h5>
@@ -185,7 +185,7 @@ Filtar compradores por nome
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
-                <form method="POST" action="dependentes.php" class="search nav-form">
+                <form method="POST" action="obras.php" class="search nav-form">
 <div class="input-group input-search">
 <input type="text" class="form-control" name="termo" id="q" placeholder="Pesquisa por nome...">
 <span class="input-group-btn">
@@ -327,7 +327,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
                     <?php 
 $result_logs = "SELECT * from imagemObra i  where i.obra = " .$row["idObra"] ;
 $resultado_logs = mysqli_query($conn, $result_logs);
-$total_logs = mysqli_num_rows($resultado_logs);
+$totalImagens = mysqli_num_rows($resultado_logs);
 $marcadores =0;
 while($lista = mysqli_fetch_assoc($resultado_logs)){ ?>
                  <form action="updateCapa.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
@@ -337,18 +337,20 @@ while($lista = mysqli_fetch_assoc($resultado_logs)){ ?>
       
         <img  src="UP/<?php echo $lista["imagem"] ?>"  alt="Lights" style="width:100%">
         <div class="caption">
-        <?php 
+        <?php
         if ($lista["capa"] ==0){?>
         
         <a href="updateCapa.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente definir como capa ?')"> <button type="button" class="btn btn-primary btn-xs">Definir como capa</button></a>
         <a href="delete.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
-<?php } else{?>
+<?php } else{
+
+  if($totalImagens >1){?>
   <a href="delete.php?id=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
 
 
-<?php }?>
+<?php }}?>
 
-<input type="text" name="obra" value="<?php echo $row["idObra"]?>">
+<input type="hidden" name="obra" value="<?php echo $row["idObra"]?>">
         </div>
       </a>
     

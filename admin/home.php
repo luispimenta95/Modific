@@ -66,9 +66,12 @@ $pagina_atual = "home.php";
       
        <header class="header">
 <div class="logo-container">
-<a href="../" class="logo">
+  <?php 
+  if($_SESSION["logado"]){?>
+<a href="home.php" class="logo">
 <img src="assets/images/logo2.jpg" height="35" alt="Legrano Orgânicos">
 </a>
+<?php } ?>
 <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
 <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
 </div>
@@ -82,7 +85,7 @@ $pagina_atual = "home.php";
 </figure>
 <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@JSOFT.com">
 <span class="name"><?php echo $_SESSION["nomeAdministrador"] ?></span>
-<span class="role">Legrano | Administrativo</span>
+<span class="role">Modific | Administrativo</span>
 
 </div>
 <i class="fa custom-caret"></i>
@@ -115,14 +118,10 @@ $pagina_atual = "home.php";
 
             <ul class="list-group">
   <a href="home.php"> <li class="<?php if($pagina_atual="home.php"){echo "list-group-item active";}else{echo "list-group-item";} ?>">Home</li></a>
-  <a href="clientes.php"> <li class="list-group-item">Sócios </li></a>
-<a href="dependentes.php"> <li class="list-group-item">Dependentes </li></a>
-  <a href="movimentacoes.php"> <li class="list-group-item">Registros financeiros </li></a>
-    <a href="log.php"> <li class="list-group-item">Registros de cadastro</li></a>
-        <a href="promocoes.php"> <li class="list-group-item">Promoções</li></a>
-
-<a href="mensagens.php"> <li class="list-group-item">Mensagens </li></a>
-
+  <a href="empresas.php"> <li class="list-group-item">Empresas </li></a>
+<a href="usuarios.php"> <li class="list-group-item">Usuários </li></a>
+  <a href="obras.php"> <li class="list-group-item">Obras </li></a>
+   
 
 
   </ul>
