@@ -12,7 +12,7 @@ $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
   $pagina_atual = "dependentes.php";
 //Selecionar todos os logs da tabela
 $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
- entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obrainner join usuario u
+ entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
   on obra.usuario = u.idUsuario inner join statusObra s
    on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa order by obra.idObra asc";
    $obras = mysqli_query($conn, $pesquisaObras);

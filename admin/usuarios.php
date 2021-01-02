@@ -522,7 +522,7 @@ $usuario = "Engenheiro(a)";
 
        <?php
        
-$result_log = "SELECT * from obras";
+$result_log = "SELECT * from obra";
 
 $obras = mysqli_query($conn, $result_log);
 
