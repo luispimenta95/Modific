@@ -338,14 +338,20 @@ while($lista = mysqli_fetch_assoc($resultado_logs)){ ?>
         if ($lista["capa"] ==0){?>
         
         <a href="updateCapa.php?id=<?php echo $lista["idImagem"] ?>&&idObra=<?php echo $row["idObra"]; ?>"" onclick="return confirm('Deseja realmente definir como capa ?')"> <button type="button" class="btn btn-primary btn-xs">Definir como capa</button></a>
-        <a href="delete.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
+        <a href="excluirImagem.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
 <?php } else{
 
-  if($totalImagens >1){?>
-  <a href="delete.php?id=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
+  if($totalImagens >1 && $lista["capa"]==0){?>
+  <a href="excluirImagem.php?id=<?php echo $lista["idImagem"] ?>"" onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
 
 
-<?php }}?>
+<?php }else{?>
+<p> Essa imagem está definida como capa </p>
+<?php }
+
+
+
+}?>
 
 <input type="hidden" name="obra" value="<?php echo $row["idObra"]?>">
         </div>
