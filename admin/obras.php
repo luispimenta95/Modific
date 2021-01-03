@@ -35,7 +35,7 @@ if(!isset($_POST['termo'])){
 $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
  entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
   on obra.usuario = u.idUsuario inner join statusObra s
-   on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa";
+   on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa order by obra.tituloObra limit $incio, $quantidade_pg";
 }
 else{
   $pesquisa = $_POST["termo"];
@@ -219,12 +219,11 @@ Filtar obras por nome
               $pesquisaObras = "SELECT idObra, tituloObra, dataInicial, dataProvavel, dataEntrega,
               entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
                on obra.usuario = u.idUsuario inner join statusObra s
-                on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa";
+                on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa order by obra.tituloObra limit $incio, $quantidade_pg";
 
 $resultadoObras = mysqli_query($conn, $pesquisaObras);
 $totalObras = mysqli_num_rows($resultadoObras);
 
-  $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
   }
 ?>
               <div class="table-responsive">  
@@ -753,7 +752,54 @@ $statusObra = $result->fetch_assoc();
     </tbody>
   </table>
 
-  <a href="#cadastro" data-toggle="modal"><button type='button' class='btn btn-success'>Cadastrar empresa</button></a>
+  <a href="#cadastro" data-toggle="modal"><button type='button' class='btn btn-success'>Cadastrar obra</button></a>
+
+   <?php
+       
+$result_log = "SELECT * from obra";
+
+$obras = mysqli_query($conn, $result_log);
+
+//Contar o total de logs
+$totalObras = mysqli_num_rows($obras);
+$limitador =1;
+if($totalObras > $quantidade_pg){?>
+            <nav class="text-center">
+               <ul class="pagination">
+
+              <li><a href="obras.php?pagina=1"> Primeira página </a></li>
+
+
+                 <?php
+                for($i = $pagina - $limitador; $i <= $pagina-1; $i++){
+                  if($i>=1){
+                    ?>
+                        <li><a href="obras.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
+
+
+                  <?php }
+                }
+              ?>
+                <li class="active">  <span><?php echo $pagina; ?></span></li>
+
+                  <?php
+                      for ($i = $pagina+1; $i <= $pagina+$limitador; $i++){
+                        if($i<=$num_pagina){?>
+                              <li><a href="obras.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
+
+                  <?php }
+                      } 
+                        
+                      
+
+                   ?>
+              <li><a href="obras.php?pagina=<?php echo $num_pagina; ?>"> <span aria-hidden="true"> Ultima página </span></a></li>
+
+
+
+<?php } ?>
+</ul>
+</nav>
 
   </div>
 
