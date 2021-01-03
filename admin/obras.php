@@ -232,7 +232,6 @@ $totalObras = mysqli_num_rows($resultadoObras);
  <table class="table table-bordered">
     <thead>
       <tr>
-      <th>Código da obra </th>
    
    <th>Nome da obra </th>
       <th>Nome da empresa </th>
@@ -253,7 +252,6 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
 
       <tr>
-      <th> <?php echo $row["idObra"] ?> </th>
       <th> <?php echo $row["tituloObra"] ?> </th>
   
   <th> <?php echo $row["nomeEmpresa"] ?> </th>
@@ -339,7 +337,7 @@ while($lista = mysqli_fetch_assoc($resultado_logs)){ ?>
         <?php
         if ($lista["capa"] ==0){?>
         
-        <a href="updateCapa.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente definir como capa ?')"> <button type="button" class="btn btn-primary btn-xs">Definir como capa</button></a>
+        <a href="updateCapa.php?id=<?php echo $lista["idImagem"] ?>&&idObra=<?php echo $row["idObra"]; ?>"" onclick="return confirm('Deseja realmente definir como capa ?')"> <button type="button" class="btn btn-primary btn-xs">Definir como capa</button></a>
         <a href="delete.php?idImagem=<?php echo $lista["idImagem"] ?> " onclick="return confirm('Deseja realmente excluir o registro ?')"><button type="button" class="btn btn-danger btn-xs">Excluir imagem</button></a>
 <?php } else{
 
@@ -396,7 +394,7 @@ while($lista = mysqli_fetch_assoc($resultado_logs)){ ?>
                                 
     <div class="form-group">
 
-    <input type="file"  id="exampleInputEmail1"  name="arquivo[]" multiple="multiple">
+    <input type="file"  id="exampleInputEmail1"  name="arquivo[]" multiple="multiple" required>
 
     </div>
  </div>
