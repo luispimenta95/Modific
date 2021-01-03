@@ -9,19 +9,19 @@ include '../funcoes.php';
 
 mysqli_set_charset( $conn, 'utf8');
 $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1;
-  $pagina_atual = "dependentes.php";
+  $pagina_atual = "empresas.php";
 //Selecionar todos os logs da tabela
-$result_log = "SELECT * from empresas";
-$resultado_log = mysqli_query($conn, $result_log);
+$pesquisaObras = "SELECT nomeEmpresa from empresa e order by e.nomeEmpresa";
+   $obras = mysqli_query($conn, $pesquisaObras);
 
 //Contar o total de logs
-$total_logs = mysqli_num_rows($resultado_log);
+$totalObras = mysqli_num_rows($obras);
 
 //Seta a quantidade de logs por pagina
 $quantidade_pg = 5;
 
 //calcular o número de pagina necessárias para apresentar os logs
-$num_pagina = ceil($total_logs/$quantidade_pg);
+$num_pagina = ceil($totalObras/$quantidade_pg);
 
 //Calcular o inicio da visualizacao
 $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
@@ -29,19 +29,22 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-$result_logs = "SELECT * from empresa limit $incio, $quantidade_pg" ;
+  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario order by e.nomeEmpresa";
 
 }
 else{
   $pesquisa = $_POST["termo"];
 
-  $result_logs = "SELECT * from empresa e WHERE e.nomeEmpresa LIKE '%".$pesquisa."%' order by e.nomeEmpresa limit $incio, $quantidade_pg";
-
+  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario WHERE e.nomeEmpresa LIKE '%".$pesquisa."%'  
+  order by e.nomeEmpresa";
 }
+//preciso fazer as pesquisas
 
 
-$resultado_logs = mysqli_query($conn, $result_logs);
-$total_logs = mysqli_num_rows($resultado_logs);
+$resultadoObras = mysqli_query($conn, $pesquisaObras);
+$totalObras = mysqli_num_rows($resultadoObras);
+
+
 ?>
 <!doctype html>
 <html class="fixed">
@@ -94,9 +97,11 @@ $total_logs = mysqli_num_rows($resultado_logs);
       <!-- start: header -->
        <header class="header">
 <div class="logo-container">
-<a href="../" class="logo">
+  <?php if($_SESSION["logado"]){?>
+<a href = "home.php" class="logo">
 <img src="assets/images/logo2.jpg" height="35" alt="Legrano Orgânicos">
 </a>
+<?php }?>
 <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
 <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
 </div>
@@ -113,8 +118,8 @@ $total_logs = mysqli_num_rows($resultado_logs);
 <img src="assets/images/user.jpg" alt="Joseph Doe" class="img-circle" data-lock-picture="assets/images/!logged-user.jpg">
 </figure>
 <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@JSOFT.com">
-<span class="name"><?php echo $_SESSION["nome_administrador"] ?></span>
-<span class="role">Legrano | Administrativo</span>
+<span class="name"><?php echo $_SESSION["nomeAdministrador"] ?></span>
+<span class="role">Modific | Administrativo</span>
 
 </div>
 <i class="fa custom-caret"></i>
@@ -150,13 +155,10 @@ $total_logs = mysqli_num_rows($resultado_logs);
 
             <ul class="list-group">
 <a href="home.php"> <li class="list-group-item">Home</li></a>
-  <a href="clientes.php"> <li class="list-group-item">Sócios </li></a>
-<a href="dependentes.php"> <li class="<?php if($pagina_atual="dependentes.php"){echo "list-group-item active";}else{echo "list-group-item";} ?>">Dependentes </li></a>
-  <a href="movimentacoes.php"> <li class="list-group-item">Registros financeiros </li></a>
-    <a href="log.php"> <li class="list-group-item">Registros de cadastro</li></a>
-    
-<a href="mensagens.php"> <li class="list-group-item">Mensagens </li></a>
-<a href="promocoes.php"> <li class="list-group-item">Promoções </li></a>
+<a href="empresas.php"> <li class="<?php if($pagina_atual="empresas.php"){echo "list-group-item active";}else{echo "list-group-item";} ?>">Empresas </li></a>
+  <a href="usuarios.php"> <li class="list-group-item">Usuários </li></a>
+    <a href="obras.php"> <li class="list-group-item">Obras</li></a>
+
 
 
 
@@ -167,7 +169,7 @@ $total_logs = mysqli_num_rows($resultado_logs);
     <div class="card-header" id="headingOne">
       <h5 class="mb-0">
         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-Filtar compradores por nome
+Filtar empresas por nome
 
         </button>
       </h5>
@@ -175,7 +177,7 @@ Filtar compradores por nome
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
-                <form method="POST" action="dependentes.php" class="search nav-form">
+                <form method="POST" action="empresas.php" class="search nav-form">
 <div class="input-group input-search">
 <input type="text" class="form-control" name="termo" id="q" placeholder="Pesquisa por nome...">
 <span class="input-group-btn">
@@ -205,145 +207,112 @@ Filtar compradores por nome
 
 
 
-             if($total_logs ==0){
-              $result_logs = "SELECT c.id_cliente,co.id_comprador,co.nome_comprador,nome_cliente from cliente c inner join comprador co on c.id_cliente = co.id_cliente order by c.nome_cliente,co.nome_comprador limit $incio, $quantidade_pg" ;
+             if($totalObras ==0){
 
 
-$resultado_logs = mysqli_query($conn, $result_logs);
-$total_logs = mysqli_num_rows($resultado_logs);
 
   $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
-  }
-?>
-              <div class="table-responsive">          
-  <table class="table table-bordered">
-    <thead>
+  }?>
+              <div class="table-responsive">  
+              <table class="table table-bordered">
+             
+              <thead>
       <tr>
         
-   <th>Nome da empresa </th>
+    <th> Nome da empresa</th>
+   
+    <th> Responsável </th>
+ 
     <th> Ações </th>
         
-
+          </tr>
         </tr>
     </thead>
     <tbody>
              <?php 
 
 
-             while($row = mysqli_fetch_assoc($resultado_logs)){ ?>
+             while($row = mysqli_fetch_assoc($resultadoObras)){ ?>
 
 
       <tr>
 
-  <th> <?php echo $row["nomeEmpresa"] ?> </th>
+<th> <?php echo $row["nomeEmpresa"] ?> </th>
 
-<th>  <a href="#edicao<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></a>
+<th> <?php echo $row["nomeUsuario"] ?> </th>
+  
+  <th>     
+           
+       <a href="#edicao<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-primary btn-sm'>Editar</button></a>
 
-<a href="#obra<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'><span class='glyphicon glyphicon-map-marker' aria-hidden='true'></span></button></a>
-
-
-
- </th>
-
-  <!-- ================================== EDIÇÃO ========================== -->
-
-    <form action="update_dep.php?id=<?php echo $row["idEmpresa"]; ?>" method="POST" enctype="multipart/form-data">
+       <a href="#verDados<?php echo $row["idEmpresa"] ?>" data-toggle="modal"><button type='button' class='btn btn-warning btn-sm'>Ver dados</button></a>
 
 
-        <div id="edicao<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
+          </th>
+          <div id="verDados<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Alterar dados de uma empresa</h4>
+        <h4 class="modal-title">Ver dados de uma empresa</h4>
       </div>
       <div class="modal-body">
-kkkkkkkkkkkkkkk
-      </div>
-      <div class="modal-footer">
-                     <button type="submit" class=" btn btn-primary">Confirmar alteração</button>
 
-        <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
+      <div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="UP/<?php echo $row['logoEmpresa']; ?>" alt="Imagem de capa da empresa">
 
-  </div>
 </div>
 
-
-
-
-</form>
-
-
-
-    <form action="cadastrarObra.php?id=<?php echo $row["idEmpresa"]; ?>" method="POST" enctype="multipart/form-data">
-
-
-        <div id="obra<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Cadastrar uma obra</h4>
-      </div>
-      <div class="modal-body">
-      <div class="form-group">
-    <label for="exampleInputEmail1">Empresa responsável</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" name="nomeEmpresa" value="<?php echo $row["nomeEmpresa"] ?>" readonly>
-    </div>
-
-    <div class="form-group">
-    <label for="inputEmail3" class="form-group">Engenheiro responsavel</label>
-    <div class="form-group">
-      <select name="engenheiro" required>
-   <option >Selecione</option>
-        <?php 
-    //    $idselect=$row["id_cliente"];
-        $sql2 = "SELECT * from engenheiro e order by e.nomeEngenheiro";
-$result2 = $conn->query($sql2);
-
-while($engenheiro = $result2->fetch_assoc()) { 
-
-        ?>
-    <option value="<?php echo $engenheiro["idEngenheiro"]; ?>"><?php echo $engenheiro["nomeEngenheiro"];?></option>
-                            <?php
-                        }
-                    ?>
-</select>
-    </div>
-  </div>
-
-
-  <div class="form-group">
-    <label for="inputEmail3" class="form-group">Data de inicio</label>
-    <div class="form-group">
-    <input type="text" name="datIni" min="1900-01-01"max="2040-12-31" class="form-control"required>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-          Favor inserir conforme o padrão : 25/12/2019.
-        </small>
+      <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Nome da empresa</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeEmpresa"] ?>"readonly>
     </div>
   </div>
 
   
-  <div class="form-group">
-    <label for="inputEmail3" class="form-group">Data de previsão para entrega</label>
-    <div class="form-group">
-    <input type="text" name="datFim" min="1900-01-01"max="2040-12-31" class="form-control"required>
-      <small id="passwordHelpBlock" class="form-text text-muted">
-          Favor inserir conforme o padrão : 25/12/2019.
-        </small>
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">CNPJ da empresa</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["cnpjEmpresa"] ?>"readonly>
     </div>
   </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Telefone da empresa</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["telefoneEmpresa"] ?>"readonly>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Situação da empresa</label>
+    <div class="col-sm-4">
+
+    <?php 
+        $situacao;
+        if($row["ativa"]==1){
+          $situacao = "Ativa";
+        }
+        else $situacao = "Intiva";
+    ?>
+      <input type="text" class="form-control" name="nome02" value="<?php echo $situacao ?>"readonly>
+    </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-6 col-form-label">Responsável pela empresa</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="nome02" value="<?php echo $row["nomeUsuario"] ?>"readonly>
+    </div>
+  </div>
+
       </div>
       <div class="modal-footer">
-                     <button type="submit" class=" btn btn-primary">Confirmar dados</button>
 
-        <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class=" btn btn-primary" data-dismiss="modal">Voltar</button>
       </div>
     </div>
 
@@ -352,43 +321,232 @@ while($engenheiro = $result2->fetch_assoc()) {
 
 
 
+<form action="editarEmpresa.php?id=<?php echo $row["idEmpresa"]; ?>" method="POST" enctype="multipart/form-data">
+
+
+<div id="edicao<?php echo $row["idEmpresa"] ?>" class="modal fade" role="dialog" class="form-group">
+<div class="modal-dialog">
+
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Entrega de uma obra</h4>
+</div>
+<div class="modal-body">
+<div class="form-group row">
+    <label for="inputEmail3" >Nome da empresa</label>
+    <div class="col-sm-10">
+      <input type="text" name="nomeEmpresa" class="form-control" id="inputEmail3" value="<?php echo $row["nomeEmpresa"]?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputEmail3" >CNPJ da empresa</label>
+    <div class="col-sm-10">
+      <input type="text" name="cnpjEmpresa" class="form-control" id="inputEmail3" value="<?php echo $row["cnpjEmpresa"]?>">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputEmail3" >Telefone da empresa</label>
+    <div class="col-sm-10">
+      <input type="text" name="telefoneEmpresa" class="form-control" id="inputEmail3" value="<?php echo $row["telefoneEmpresa"]?>">
+    </div>
+  </div>
+    <div class="form-group row">
+      <label for="inputEstado">Responsável pela empresa</label>
+      <select id="inputEstado" name="responsavel" class="form-control">
+
+      <?php 
+$sql = "SELECT idUsuario,nomeUsuario FROM usuario u INNER JOIN empresa e on e.usuario = u.idUsuario where e.idEmpresa = " .$row["idEmpresa"];
+$result = $conn->query($sql);
+$administrador = $result->fetch_assoc();
+      
+      ?>
+        <option selected value="<?php echo $administrador["idUsuario"]; ?>"><?php echo $administrador["nomeUsuario"];?></option>
+        <?php
+        
+        $sql2 = "SELECT * from usuario u WHERE not u.idUsuario= " .$administrador["idUsuario"] . " order by u.nomeUsuario" ;
+        $result2 = $conn->query($sql2);
+        
+        while($socio2 = $result2->fetch_assoc()) { 
+        
+                ?>
+            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
+                                    <?php
+                                }
+        
+        ?>
+      </select>
+    </div>
+
+    <div class="form-group row">
+    <label for="inputEmail3" >Situação da empresa</label>
+   <?php 
+if ($row["ativa"]==1){?>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="situacao" id="situacao1" value="1" checked>
+  <label class="form-check-label" for="situacao1">
+Ativa
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="situacao" id="situacao2" value="0">
+  <label class="form-check-label" for="situacao2">
+Inativa
+
+  </label>
+</div>
+
+<?php } else {?>
+
+  <div class="form-check">
+  <input class="form-check-input" type="radio" name="situacao" id="situacao1" value="1" >
+  <label class="form-check-label" for="situacao1">
+    Ativa
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="situacao" id="situacao2" value="0" checked>
+  <label class="form-check-label" for="situacao2">
+    Inativa
+  </label>
+</div>
+<?php } 
+   ?>
+  </div>
+
+                                
+    <div class="form-group">
+    Selecione uma imagem: <input name="arquivo" type="file" />   
+    </div>
+
+
+
+</div>
+<div class="modal-footer">
+
+<button type="submit" class=" btn btn-primary">Confirmar dados</button>
+<button type="submit" class=" btn btn-default" data-dismiss="modal">Voltar</button>
+
+</div>
+</div>
+
+</div>
+</div>
+
+
+
 
 </form>
 
 
+<form action="cadastroEmpresa.php" method="POST" class="form-group"  enctype="multipart/form-data">
+       
+       <div id="cadastro" class="modal fade" role="dialog" class="form-group">
+         <div class="modal-dialog">
 
-        <?php } ?>
+   <!-- Modal content-->
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal">&times;</button>
+       
+       <h4 class="modal-title">Cadastro de empresa</h4>
+     </div>
+     <div class="modal-body">
+
+     <div class="form-group row">
+    <label for="inputEmail3" >Nome da empresa</label>
+    <div class="col-sm-10">
+      <input type="text" name="nomeEmpresa" class="form-control" id="inputEmail3" >
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputEmail3" >CNPJ da empresa</label>
+    <div class="col-sm-10">
+      <input type="text" name="cnpjEmpresa" class="form-control" id="inputEmail3" >
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputEmail3" >Telefone da empresa</label>
+    <div class="col-sm-10">
+      <input type="text" name="telefoneEmpresa" class="form-control" id="inputEmail3">
+    </div>
+  </div>
+    <div class="form-group row">
+      <label for="inputEstado">Responsável pela empresa</label>
+      <select id="inputEstado" name="responsavel" class="form-control">
+
+
+        <option>Selecione </option>
+        <?php
+        
+        $sql2 = "SELECT * from usuario u  order by u.nomeUsuario" ;
+        $result2 = $conn->query($sql2);
+        
+        while($socio2 = $result2->fetch_assoc()) { 
+        
+                ?>
+            <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"];?></option>
+                                    <?php
+                                }
+        
+        ?>
+      </select>
+    </div>
+
+   
+
+                                
+    <div class="form-group">
+    Selecione uma logo: <input name="arquivo" type="file" />   
+    </div>
+ </div>
+
+
+   
+     <div class="modal-footer">
+                    <button type="submit" class=" btn btn-primary">Realizar cadastro</button>
+
+       <button type="submit" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
+     </div>
+   </div>
+
+ </div>
+                       </div>
+         
+</form>
+
+
+
+          <?php } ?>
         </tr>
           
     </tbody>
   </table>
-  <?php
-          if(isset($msg_pesquisa)){
-            echo $msg_pesquisa;
-            unset($msg_pesquisa);
-          }
-        ?>
+
+  <a href="#cadastro" data-toggle="modal"><button type='button' class='btn btn-success'>Cadastrar empresa</button></a>
 
        <?php
-$result_log = "SELECT * from comprador";
+       
+$result_log = "SELECT * from obra";
 
-$resultado_log = mysqli_query($conn, $result_log);
+$obras = mysqli_query($conn, $result_log);
 
 //Contar o total de logs
-$total_logs = mysqli_num_rows($resultado_log);
+$totalObras = mysqli_num_rows($obras);
 $limitador =1;
-if($total_logs > $quantidade_pg){?>
+if($totalObras > $quantidade_pg){?>
             <nav class="text-center">
                <ul class="pagination">
 
-              <li><a href="dependentes.php?pagina=1"> Primeira página </a></li>
+              <li><a href="empresas.php?pagina=1"> Primeira página </a></li>
 
 
                  <?php
                 for($i = $pagina - $limitador; $i <= $pagina-1; $i++){
                   if($i>=1){
                     ?>
-                        <li><a href="dependentes.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
+                        <li><a href="empresas.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
 
 
                   <?php }
@@ -399,7 +557,7 @@ if($total_logs > $quantidade_pg){?>
                   <?php
                       for ($i = $pagina+1; $i <= $pagina+$limitador; $i++){
                         if($i<=$num_pagina){?>
-                              <li><a href="dependentes.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
+                              <li><a href="empresas.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
 
                   <?php }
                       } 
@@ -407,7 +565,7 @@ if($total_logs > $quantidade_pg){?>
                       
 
                    ?>
-              <li><a href="dependentes.php?pagina=<?php echo $num_pagina; ?>"> <span aria-hidden="true"> Ultima página </span></a></li>
+              <li><a href="empresas.php?pagina=<?php echo $num_pagina; ?>"> <span aria-hidden="true"> Ultima página </span></a></li>
 
 
 
@@ -416,8 +574,8 @@ if($total_logs > $quantidade_pg){?>
 </nav>
                
 
-    <a href = "relatorio_dependentes.php"><button type="button" class="btn btn-dark">Gerar relatório </button>
-  
+    
+   
 
   </div>
 
@@ -496,3 +654,4 @@ if($total_logs > $quantidade_pg){?>
     <script src="assets/javascripts/dashboard/examples.dashboard.js"></script>
   </body>
 </html>
+

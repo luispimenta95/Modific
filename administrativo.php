@@ -2,7 +2,7 @@
 	session_start();
 	include 'conecta.php';
 ?>
-<!DOCTYPE html>kkk
+<!DOCTYPE html>
 <html lang="pt-br">
 	<head>
 		<meta charset="utf-8">
