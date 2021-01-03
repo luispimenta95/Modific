@@ -29,14 +29,15 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-  $pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario";
+  $pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario  limit $incio, $quantidade_pg";
+
 
 
 }
 else{
   $pesquisa = $_POST["termo"];
 
-  $pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario";
+  $pesquisaObras = "SELECT * FROM usuario u   WHERE u.nomeUsuario LIKE '%".$pesquisa."%' order by u.nomeUsuario";
 
 }
 
@@ -182,7 +183,7 @@ Filtar usuários por nome
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
-                <form method="POST" action="Usuarios.php" class="search nav-form">
+                <form method="POST" action="usuarios.php" class="search nav-form">
 <div class="input-group input-search">
 <input type="text" class="form-control" name="termo" id="q" placeholder="Pesquisa por nome...">
 <span class="input-group-btn">
@@ -213,10 +214,15 @@ Filtar usuários por nome
 
 
              if($totalObras ==0){
+              $result_logs = "SELECT * FROM usuario u order by u.nomeUsuario  limit $incio, $quantidade_pg";
+
              
               
+$resultadoObras = mysqli_query($conn, $result_logs);
+$total_logs = mysqli_num_rows($resultadoObras);
 
-  $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
+
+  
   }
 ?>
               <div class="table-responsive">  
@@ -522,7 +528,7 @@ $usuario = "Engenheiro(a)";
 
        <?php
        
-$result_log = "SELECT * from obra";
+$result_log = "SELECT * from usuario";
 
 $obras = mysqli_query($conn, $result_log);
 
@@ -533,14 +539,14 @@ if($totalObras > $quantidade_pg){?>
             <nav class="text-center">
                <ul class="pagination">
 
-              <li><a href="Usuarios.php?pagina=1"> Primeira página </a></li>
+              <li><a href="usuarios.php?pagina=1"> Primeira página </a></li>
 
 
                  <?php
                 for($i = $pagina - $limitador; $i <= $pagina-1; $i++){
                   if($i>=1){
                     ?>
-                        <li><a href="Usuarios.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
+                        <li><a href="usuarios.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
 
 
                   <?php }
@@ -551,7 +557,7 @@ if($totalObras > $quantidade_pg){?>
                   <?php
                       for ($i = $pagina+1; $i <= $pagina+$limitador; $i++){
                         if($i<=$num_pagina){?>
-                              <li><a href="Usuarios.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
+                              <li><a href="usuarios.php?pagina=<?php echo $i; ?>"> <?php echo $i;?></a></li>
 
                   <?php }
                       } 
@@ -559,7 +565,7 @@ if($totalObras > $quantidade_pg){?>
                       
 
                    ?>
-              <li><a href="Usuarios.php?pagina=<?php echo $num_pagina; ?>"> <span aria-hidden="true"> Ultima página </span></a></li>
+              <li><a href="usuarios.php?pagina=<?php echo $num_pagina; ?>"> <span aria-hidden="true"> Ultima página </span></a></li>
 
 
 

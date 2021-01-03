@@ -36,7 +36,7 @@ else{
   $pesquisa = $_POST["termo"];
 
   $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario WHERE e.nomeEmpresa LIKE '%".$pesquisa."%'  
-  order by e.nomeEmpresa";
+  order by e.nomeEmpresa limit $incio, $quantidade_pg";
 }
 //preciso fazer as pesquisas
 
