@@ -29,7 +29,7 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 //Selecionar os logs a serem apresentado na página
 $pesquisa = "";
 if(!isset($_POST['termo'])){
-  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario order by e.nomeEmpresa";
+  $pesquisaObras = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario order by e.nomeEmpresa limit $incio, $quantidade_pg";
 
 }
 else{
@@ -206,13 +206,17 @@ Filtar empresas por nome
              <?php 
 
 
-
              if($totalObras ==0){
+              $result_logs = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario order by e.nomeEmpresa limit $incio, $quantidade_pg";
 
-
+$resultadoObras = mysqli_query($conn, $result_logs);
+$total_logs = mysqli_num_rows($resultadoObras);
 
   $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
-  }?>
+  }
+
+  
+?>
               <div class="table-responsive">  
               <table class="table table-bordered">
              
@@ -526,9 +530,11 @@ Inativa
 
   <a href="#cadastro" data-toggle="modal"><button type='button' class='btn btn-success'>Cadastrar empresa</button></a>
 
+
+
        <?php
        
-$result_log = "SELECT * from obra";
+$result_log = "SELECT * from empresa";
 
 $obras = mysqli_query($conn, $result_log);
 
