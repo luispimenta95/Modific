@@ -30,6 +30,7 @@ $incio = ($quantidade_pg*$pagina)-$quantidade_pg;
 $pesquisa = "";
 if(!isset($_POST['termo'])){
   $pesquisaObras = "SELECT * FROM usuario u order by u.nomeUsuario  limit $incio, $quantidade_pg";
+    
 
 
 
@@ -215,6 +216,8 @@ Filtar usuários por nome
 
              if($totalObras ==0){
               $result_logs = "SELECT * FROM usuario u order by u.nomeUsuario  limit $incio, $quantidade_pg";
+                  $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhum usuário encontrado com o termo pesquisado </div>";
+
 
              
               
@@ -226,6 +229,13 @@ $total_logs = mysqli_num_rows($resultadoObras);
   }
 ?>
               <div class="table-responsive">  
+                   <?php
+          if(isset($_SESSION['msg'])){
+            echo $_SESSION['msg'];
+            unset($_SESSION['msg']);
+          }
+          
+        ?>
               <table class="table table-bordered">
              
               <thead>
@@ -525,6 +535,7 @@ $usuario = "Engenheiro(a)";
   </table>
 
   <a href="#cadastro" data-toggle="modal"><button type='button' class='btn btn-success'>Cadastrar Usuario</button></a>
+ 
 
        <?php
        

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../conecta.php'; 
 
 $nomeUsuario = $_POST["nomeUsuario"];
@@ -12,7 +13,8 @@ telefoneUsuario,dataCadastro) VALUES
  ('$nomeUsuario','$cpfUsuario', '$telefoneUsuario' ,NOW())";
 
 if ($conn->query($salvarUsuario) === TRUE) {
-
+	$_SESSION['msg'] = "<div class='alert alert-success'>Usuário cadastrado com sucesso ! </div>";
+		header("Location: usuarios.php");	
     header("Location:usuarios.php");
   }
 
