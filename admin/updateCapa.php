@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include '../conecta.php';
 
 $idImagem = $_GET["id"];
@@ -11,6 +12,7 @@ if ($conn->query($sql_inicial) === TRUE) {
 
 
   if ($conn->query($sql_final) === TRUE) {
+     $_SESSION['msg'] = "<div class='alert alert-primary'>Capa definida com sucesso. </div>";
 
  header("Location:obras.php");
 } else {

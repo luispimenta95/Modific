@@ -220,6 +220,7 @@ Filtar obras por nome
               entregue, nomeEmpresa, nomeUsuario, nomeStatus, observacoes FROM obra inner join usuario u
                on obra.usuario = u.idUsuario inner join statusObra s
                 on obra.statusObra = s.idStatus inner join empresa e on obra.empresa = e.idEmpresa order by obra.tituloObra limit $incio, $quantidade_pg";
+                       $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhuma obra encontrada . </div>";
 
 $resultadoObras = mysqli_query($conn, $pesquisaObras);
 $totalObras = mysqli_num_rows($resultadoObras);
@@ -228,7 +229,13 @@ $totalObras = mysqli_num_rows($resultadoObras);
 ?>
               <div class="table-responsive">  
 
-             
+                           <?php
+          if(isset($_SESSION['msg'])){
+            echo $_SESSION['msg'];
+            unset($_SESSION['msg']);
+          }
+          
+        ?>
  <table class="table table-bordered">
     <thead>
       <tr>

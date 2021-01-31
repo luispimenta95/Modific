@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../conecta.php'; 
 $idEmpresa = $_GET['id'];
 $nomeEmpresa;
@@ -26,6 +27,7 @@ $situacaoEmpresa = $_POST['situacao'];
 
 $sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$cnpjEmpresa' , telefoneEmpresa = '$telefoneEmpresa' ,logoEmpresa = '$logoEmpresa', ativa = $situacaoEmpresa, usuario = $responsavelEmpresa  WHERE idEmpresa=$idEmpresa";
 if ($conn->query($sqlUpdate) === TRUE) {
+		$_SESSION['msg'] = "<div class='alert alert-primary'>Alterações realizadas com sucesso ! </div>";
 
     header("Location:empresas.php");
   }
@@ -46,6 +48,7 @@ $sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$c
 
 
 if ($conn->query($sqlUpdate) === TRUE) {
+		$_SESSION['msg'] = "<div class='alert alert-primary'>Alterações realizadas com sucesso ! </div>";
 
     header("Location:empresas.php");
   }

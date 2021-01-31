@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("../conecta.php");
 $tituloObra = $_POST['titulo'];
 $dataInicial =$_POST['dataIni'];
@@ -32,6 +33,7 @@ else{
 }
 
 if ($conn->query($sql_update) === TRUE) {
+       $_SESSION['msg'] = "<div class='alert alert-primary'>Alterações realizadas com sucesso. </div>";
 
     header("Location:obras.php");
   }

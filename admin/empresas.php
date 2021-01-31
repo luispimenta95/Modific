@@ -208,16 +208,24 @@ Filtar empresas por nome
 
              if($totalObras ==0){
               $result_logs = "SELECT idEmpresa,nomeEmpresa,cnpjEmpresa,ativa,telefoneEmpresa,logoEmpresa,nomeUsuario FROM empresa e inner join usuario u on e.usuario = u.idUsuario order by e.nomeEmpresa limit $incio, $quantidade_pg";
+                   $_SESSION['msg'] = "<div class='alert alert-danger'>Nenhuma emprsa encontrada . </div>";
+
 
 $resultadoObras = mysqli_query($conn, $result_logs);
 $total_logs = mysqli_num_rows($resultadoObras);
 
-  $msg_pesquisa = "<div class='alert alert-warning'>Nenhum cliente encontrado no sistema ! </div>";
   }
 
   
 ?>
               <div class="table-responsive">  
+                                  <?php
+          if(isset($_SESSION['msg'])){
+            echo $_SESSION['msg'];
+            unset($_SESSION['msg']);
+          }
+          
+        ?>
               <table class="table table-bordered">
              
               <thead>

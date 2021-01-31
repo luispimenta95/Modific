@@ -1,4 +1,5 @@
 <?php
+session_start();
   include '../conecta.php';
 
 
@@ -26,6 +27,9 @@ else{
     }
 
 if ($conn->query($sql_code) === TRUE) {
+     $_SESSION['msg'] = "<div class='alert alert-primary'>Imagem(ns) adicionada com sucesso. </div>";
+
+
           header("Location:obras.php");
 
         }
