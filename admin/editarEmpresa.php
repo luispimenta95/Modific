@@ -1,6 +1,8 @@
 <?php
 session_start();
 include '../conecta.php'; 
+include 'mensagemPadrao.php'; 
+
 $idEmpresa = $_GET['id'];
 $nomeEmpresa;
 $cnpjEmpresa;
@@ -27,12 +29,13 @@ $situacaoEmpresa = $_POST['situacao'];
 
 $sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$cnpjEmpresa' , telefoneEmpresa = '$telefoneEmpresa' ,logoEmpresa = '$logoEmpresa', ativa = $situacaoEmpresa, usuario = $responsavelEmpresa  WHERE idEmpresa=$idEmpresa";
 if ($conn->query($sqlUpdate) === TRUE) {
-		$_SESSION['msg'] = "<div class='alert alert-primary'>Alterações realizadas com sucesso ! </div>";
+        $_SESSION['msg'] = $mensagens["cadastro"];
 
     header("Location:empresas.php");
   }
 
-  else echo $conn->error;
+  else         $_SESSION['msg'] = $mensagens["erroCadastro"];
+
 
 }
 
@@ -48,12 +51,12 @@ $sqlUpdate = "UPDATE empresa SET nomeEmpresa = '$nomeEmpresa', cnpjEmpresa = '$c
 
 
 if ($conn->query($sqlUpdate) === TRUE) {
-		$_SESSION['msg'] = "<div class='alert alert-primary'>Alterações realizadas com sucesso ! </div>";
+        $_SESSION['msg'] = $mensagens["cadastro"];
 
     header("Location:empresas.php");
   }
 
-  else echo $conn->error;
+  else         $_SESSION['msg'] = $mensagens["erroCadastro"];
 
 
 

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("../conecta.php");
+include("mensagemPadrao.php");
 $tituloObra = $_POST['titulo'];
 $dataInicial =$_POST['dataIni'];
 $dataProvavel = $_POST['dataProv'];
@@ -33,12 +34,14 @@ else{
 }
 
 if ($conn->query($sql_update) === TRUE) {
-       $_SESSION['msg'] = "<div class='alert alert-primary'>Alterações realizadas com sucesso. </div>";
+      $_SESSION['msg'] = $mensagens["edicao"];
 
     header("Location:obras.php");
   }
 
   else {
-      echo "Erro no sql : <br>" .$sql_update;
+      $_SESSION['msg'] = $mensagens["erroEdicao"];
+          header("Location:obras.php");
+
   }
 ?>

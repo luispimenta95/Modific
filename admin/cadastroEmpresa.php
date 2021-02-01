@@ -1,5 +1,6 @@
 <?php
 session_start();
+include"mensagemPadrao.php";
 include '../conecta.php'; 
 
 $nomeEmpresa;
@@ -32,13 +33,14 @@ dataCadastro) VALUES ('$nomeEmpresa','$cnpjEmpresa', '$telefoneEmpresa',
 '$responsavelEmpresa','$logoEmpresa',NOW())";
 
 if ($conn->query($salvarEmpresa) === TRUE) {
-  $_SESSION['msg'] = "<div class='alert alert-primary'>Cadastro realizado com sucesso ! </div>";
+$_SESSION['msg'] = $mensagens["cadastro"];
 
     header("Location:empresas.php");
   }
 
   else {
-      echo $salvarEmpresa;
+$_SESSION['msg'] = $mensagens["erroCadastro"];
+
   }
 
 

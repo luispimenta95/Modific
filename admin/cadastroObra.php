@@ -1,5 +1,6 @@
 <?php 
 session_start();
+include "mensagemPadrao.php";
 include '../conecta.php';
 $tituloObra =$_POST['tituloObra'];
 $dataInicial = $_POST["dataIni"];
@@ -21,12 +22,12 @@ $sqlCadastro = "INSERT INTO obra (tituloObra,dataInicial,dataProvavel,empresa,us
 
 
 if ($conn->query($sqlCadastro) === TRUE){
-	     $_SESSION['msg'] = "<div class='alert alert-primary'>Obra cadastrada com sucesso. </div>";
+	     $_SESSION['msg'] = $mensagens["cadastro"];
 
     header("Location:obras.php");
 }
 else{
-    $conn->error;
+$_SESSION['msg'] = $mensagens["erroCadastro"];
 }
 
 ;
