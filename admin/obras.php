@@ -450,7 +450,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
                             <div class="modal-content">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Entrega de uma obra</h4>
+                                <h4 class="modal-title">Edição de uma obra</h4>
                               </div>
                               <div class="modal-body">
                                 <div class="form-group row">
@@ -617,13 +617,13 @@ $totalObras = mysqli_num_rows($resultadoObras);
                           <div class="modal-content">
                             <div class="modal-header">
                               <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              <h4 class="modal-title">Entrega de uma obra</h4>
+                              <h4 class="modal-title">Detalhes de uma obra</h4>
                             </div>
                             <div class="modal-body">
                               <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Titulo da obra</label>
                                 <div class="col-sm-10">
-                                  <input type="text" name="titulo" class="form-control" id="inputEmail3" value="<?php echo $row["tituloObra"] ?>">
+                                  <input type="text" name="titulo" class="form-control" id="inputEmail3" value="<?php echo $row["tituloObra"] ?>" readonly>
                                 </div>
                               </div>
                               <div class="form-group row">
@@ -636,7 +636,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
                                                                                                                   echo $dataView;
 
 
-                                                                                                                  ?>">
+                                                                                                                  ?>" readonly>
 
                                 </div>
                               </div>
@@ -649,7 +649,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
                                                                                                                   echo $dataView;
 
-                                                                                                                  ?>">
+                                                                                                                  ?>" readonly>
                                 </div>
                               </div>
                               <div class="form-group row">
@@ -665,73 +665,43 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
                                                                                                                         echo $dataView;
                                                                                                                       }
-                                                                                                                      kkk
+                                                                                                                      
 
-                                                                                                                      ?>">
+                                                                                                                      ?>" readonly>
                                 </div>
                               </div>
 
                               <div class="form-group row">
                                 <label for="inputEstado">Empresa</label>
-                                <select id="inputEstado" name="empresa" class="form-control">
-
-                                  <?php
+                                
+                                <?php
                                   $sql = "SELECT idEmpresa,nomeEmpresa FROM empresa e INNER JOIN obra o on o.empresa = e.idEmpresa where o.idObra = " . $row["idObra"];
                                   $result = $conn->query($sql);
                                   $empresa = $result->fetch_assoc();
 
                                   ?>
-                                  <option selected value="<?php echo $empresa["idEmpresa"]; ?>"><?php echo $empresa["nomeEmpresa"]; ?></option>
-                                  <?php
+                                  <input type="text" name="empresa" class="form-control" id="inputEmail3" value="<?php echo $empresa["nomeEmpresa"] ?>" readonly>
 
-                                  $sql2 = "SELECT idEmpresa,nomeEmpresa FROM empresa e  where not e.idEmpresa = " . $empresa["idEmpresa"] . " order by e.nomeEmpresa";
-
-
-                                  $result2 = $conn->query($sql2);
-
-                                  while ($socio2 = $result2->fetch_assoc()) {
-
-                                  ?>
-                                    <option value="<?php echo $socio2["idEmpresa"]; ?>"><?php echo $socio2["nomeEmpresa"]; ?></option>
-                                  <?php
-                                  }
-
-                                  ?>
-                                </select>
                               </div>
 
                               <div class="form-group row">
                                 <label for="inputEstado">Engenheiro</label>
-                                <select id="inputEstado" name="engenheiro" class="form-control">
-
+                           
                                   <?php
                                   $sql = "SELECT idUsuario,nomeUsuario FROM usuario u INNER JOIN obra o on o.usuario = u.idUsuario where o.idObra = " . $row["idObra"];
                                   $result = $conn->query($sql);
-                                  $administrador = $result->fetch_assoc();
+                                  $engenheiro = $result->fetch_assoc();
 
                                   ?>
-                                  <option selected value="<?php echo $administrador["idUsuario"]; ?>"><?php echo $administrador["nomeUsuario"]; ?></option>
-                                  <?php
+                                                                   <input type="text" name="engenheiro" class="form-control" id="inputEmail3" value="<?php echo $engenheiro["nomeUsuario"] ?>" readonly>
 
-                                  $sql2 = "SELECT * from usuario u WHERE u.engenheiro = '1' and not u.idUsuario= " . $administrador["idUsuario"] . " order by u.nomeUsuario";
-                                  $result2 = $conn->query($sql2);
-
-                                  while ($socio2 = $result2->fetch_assoc()) {
-
-                                  ?>
-                                    <option value="<?php echo $socio2["idUsuario"]; ?>"><?php echo $socio2["nomeUsuario"]; ?></option>
-                                  <?php
-                                  }
-
-                                  ?>
-                                </select>
                               </div>
 
 
 
                               <div class="form-group row">
                                 <label for="inputEstado">Situação da obra </label>
-                                <select id="inputEstado" name="situacao" class="form-control">
+                                
 
                                   <?php
                                   $sql = "SELECT idStatus,nomeStatus FROM statusObra s INNER JOIN obra o on o.statusObra = s.idStatus where o.idObra = " . $row["idObra"];
@@ -739,31 +709,12 @@ $totalObras = mysqli_num_rows($resultadoObras);
                                   $statusObra = $result->fetch_assoc();
 
                                   ?>
-                                  <option selected value="<?php echo $statusObra["idStatus"]; ?>"><?php echo $statusObra["nomeStatus"]; ?></option>
-                                  <?php
+                                                                                                    <input type="text" name="statusObra" class="form-control" id="inputEmail3" value="<?php echo $statusObra["nomeStatus"] ?>" readonly>
 
-                                  $sql2 = "SELECT idStatus,nomeStatus FROM statusObra s  where not s.idStatus = " . $statusObra["idStatus"] . " order by s.nomeStatus";
-
-
-                                  $result2 = $conn->query($sql2);
-
-                                  while ($socio2 = $result2->fetch_assoc()) {
-
-                                  ?>
-                                    <option value="<?php echo $socio2["idStatus"]; ?>"><?php echo $socio2["nomeStatus"]; ?></option>
-                                  <?php
-                                  }
-
-                                  ?>
-                                </select>
                               </div>
 
                             </div>
-                            <div class="modal-footer">
-
-                              <button type="submit" class=" btn btn-primary">Confirmar dados</button>
-                            </div>
-                          </div>
+                                                      </div>
 
                         </div>
                       </div>
