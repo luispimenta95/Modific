@@ -665,7 +665,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
                                                                                                                         echo $dataView;
                                                                                                                       }
-                                                                                                                      
+
 
                                                                                                                       ?>" readonly>
                                 </div>
@@ -673,27 +673,27 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
                               <div class="form-group row">
                                 <label for="inputEstado">Empresa</label>
-                                
-                                <?php
-                                  $sql = "SELECT idEmpresa,nomeEmpresa FROM empresa e INNER JOIN obra o on o.empresa = e.idEmpresa where o.idObra = " . $row["idObra"];
-                                  $result = $conn->query($sql);
-                                  $empresa = $result->fetch_assoc();
 
-                                  ?>
-                                  <input type="text" name="empresa" class="form-control" id="inputEmail3" value="<?php echo $empresa["nomeEmpresa"] ?>" readonly>
+                                <?php
+                                $sql = "SELECT idEmpresa,nomeEmpresa FROM empresa e INNER JOIN obra o on o.empresa = e.idEmpresa where o.idObra = " . $row["idObra"];
+                                $result = $conn->query($sql);
+                                $empresa = $result->fetch_assoc();
+
+                                ?>
+                                <input type="text" name="empresa" class="form-control" id="inputEmail3" value="<?php echo $empresa["nomeEmpresa"] ?>" readonly>
 
                               </div>
 
                               <div class="form-group row">
                                 <label for="inputEstado">Engenheiro</label>
-                           
-                                  <?php
-                                  $sql = "SELECT idUsuario,nomeUsuario FROM usuario u INNER JOIN obra o on o.usuario = u.idUsuario where o.idObra = " . $row["idObra"];
-                                  $result = $conn->query($sql);
-                                  $engenheiro = $result->fetch_assoc();
 
-                                  ?>
-                                                                   <input type="text" name="engenheiro" class="form-control" id="inputEmail3" value="<?php echo $engenheiro["nomeUsuario"] ?>" readonly>
+                                <?php
+                                $sql = "SELECT idUsuario,nomeUsuario FROM usuario u INNER JOIN obra o on o.usuario = u.idUsuario where o.idObra = " . $row["idObra"];
+                                $result = $conn->query($sql);
+                                $engenheiro = $result->fetch_assoc();
+
+                                ?>
+                                <input type="text" name="engenheiro" class="form-control" id="inputEmail3" value="<?php echo $engenheiro["nomeUsuario"] ?>" readonly>
 
                               </div>
 
@@ -701,20 +701,20 @@ $totalObras = mysqli_num_rows($resultadoObras);
 
                               <div class="form-group row">
                                 <label for="inputEstado">Situação da obra </label>
-                                
 
-                                  <?php
-                                  $sql = "SELECT idStatus,nomeStatus FROM statusObra s INNER JOIN obra o on o.statusObra = s.idStatus where o.idObra = " . $row["idObra"];
-                                  $result = $conn->query($sql);
-                                  $statusObra = $result->fetch_assoc();
 
-                                  ?>
-                                                                                                    <input type="text" name="statusObra" class="form-control" id="inputEmail3" value="<?php echo $statusObra["nomeStatus"] ?>" readonly>
+                                <?php
+                                $sql = "SELECT idStatus,nomeStatus FROM statusObra s INNER JOIN obra o on o.statusObra = s.idStatus where o.idObra = " . $row["idObra"];
+                                $result = $conn->query($sql);
+                                $statusObra = $result->fetch_assoc();
+
+                                ?>
+                                <input type="text" name="statusObra" class="form-control" id="inputEmail3" value="<?php echo $statusObra["nomeStatus"] ?>" readonly>
 
                               </div>
 
                             </div>
-                                                      </div>
+                          </div>
 
                         </div>
                       </div>
