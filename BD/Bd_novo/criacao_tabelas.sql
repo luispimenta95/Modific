@@ -23,7 +23,23 @@ numeroCrea varchar(20) default null,
 dataCadastro timestamp
 
     );
+CREATE TABLE prdoduto(
+    idPrdoduto int auto_increment not null primary key,
+   nomePrdoduto varchar(100) not null,
+   imagemPrdoduto varchar(100) not null,
+   ativo boolean default 1,
+   codCorporativa int,
+   unidade varchar (15) not null,
 
+   
+
+
+  
+      
+    
+    
+    
+);
     create table empresa(
         idEmpresa int auto_increment not null primary key,
         nomeEmpresa varchar(50) not null,

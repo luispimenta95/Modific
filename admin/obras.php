@@ -348,7 +348,7 @@ $totalObras = mysqli_num_rows($resultadoObras);
                                   <form action="updateCapa.php?id=<?php echo $row["idObra"]; ?>" method="POST" enctype="multipart/form-data">
 
                                     <div class="col-md-4">
-                                      <div class="thumbnail">
+                                      <div>
 
                                         <img src="UP/<?php echo $lista["imagem"] ?>" alt="Lights" style="width:100%">
                                         <div class="caption">

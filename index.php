@@ -247,23 +247,21 @@ include 'conecta.php';
                                         $totalImagens = mysqli_num_rows($resultado_logs);
                                         $marcadores = 0;
                                         ?>
-                                        <div class="row">
-                                            <?php
-                                            while ($lista = mysqli_fetch_assoc($resultado_logs)) { ?>
+                                        <?php
+                                        while ($lista = mysqli_fetch_assoc($resultado_logs)) { ?>
 
-                                                <div class="pumbnail">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="thumbnail">
+                                                        <a href="/w3images/lights.jpg">
+                                                            <img src="admin/UP/<?php echo $lista["imagem"] ?>" alt="Lights" style="width:100%">
 
-                                                    <img src="admin/UP/<?php echo $lista["imagem"] ?>" alt="Lights" style="widp:100%">
-                                                    <div class="caption">
-
+                                                        </a>
                                                     </div>
-                                                    </a>
-
                                                 </div>
+                                            </div>
 
-
-                                            <?php } ?>
-                                        </div>
+                                        <?php } ?>
                                     </div>
                                     <div class="modal-footer">
 
