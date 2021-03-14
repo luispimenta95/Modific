@@ -253,10 +253,8 @@ include 'conecta.php';
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="thumbnail">
-                                                        <a href="/w3images/lights.jpg">
-                                                            <img src="admin/UP/<?php echo $lista["imagem"] ?>" alt="Lights" style="width:100%">
+                                                        <img src="admin/UP/<?php echo $lista["imagem"] ?>" alt="Lights" style="width:100%">
 
-                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
